@@ -1,7 +1,6 @@
 package com.libmanagementsys.vestas_proj.controller;
 
 import com.libmanagementsys.vestas_proj.repository.UserRepository;
-import com.libmanagementsys.vestas_proj.service.BookLoanService;
 import com.libmanagementsys.vestas_proj.service.BookService;
 import com.libmanagementsys.vestas_proj.service.UserService;
 

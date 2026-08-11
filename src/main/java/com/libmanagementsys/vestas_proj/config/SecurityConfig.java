@@ -7,31 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.libmanagementsys.vestas_proj.service.CustomAuthenticationSuccessHandler;
-import com.libmanagementsys.vestas_proj.service.CustomUserDetailsService;
-
-//import com.libmanagementsys.vestas_proj.service.CustomUserDetailsService;
-//import org.springframework.security.authentication.AuthenticationProvider;
-//import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 
 @Configuration
 public class SecurityConfig {
 
-    // private final CustomUserDetailsService customUserDetailsService;
-
-    // public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
-    // this.customUserDetailsService = customUserDetailsService;
-    // }
-
-    // @Bean
-    // public AuthenticationProvider authenticationProvider() {
-
-    // DaoAuthenticationProvider provider =
-    // new DaoAuthenticationProvider(customUserDetailsService);
-
-    // provider.setPasswordEncoder(passwordEncoder());
-
-    // return provider;
-    // }
     private final CustomAuthenticationSuccessHandler successHandler;
 
     public SecurityConfig(

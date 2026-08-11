@@ -85,9 +85,9 @@ public class BookLoanService {
 
     @Transactional
     public void returnBook(Long transactionId, String isbn) {
-        Transaction transaction = transactionRepo
-                .findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found."));
+        //Transaction transaction = transactionRepo
+        //        .findById(transactionId)
+        //        .orElseThrow(() -> new RuntimeException("Transaction not found."));
         Book book = bookRepo
                 .findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));

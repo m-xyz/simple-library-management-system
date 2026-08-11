@@ -37,9 +37,6 @@
             background-size: 4px 4px;
         }
 
-
-        /* LOGIN WINDOW */
-
         .window {
             width: 420px;
 
@@ -50,9 +47,6 @@
             box-shadow:
                 6px 6px 0 #000;
         }
-
-
-        /* TITLE BAR */
 
         .title-bar {
             height: 34px;
@@ -66,9 +60,6 @@
 
             padding: 0 8px;
         }
-
-
-        /* Classic Macintosh window icon */
 
         .window-icon {
             width: 16px;
@@ -88,7 +79,6 @@
             background-size: 100% 4px;
         }
 
-
         .title {
             position: absolute;
 
@@ -105,20 +95,15 @@
             letter-spacing: 1px;
         }
 
-
-        /* CONTENT */
-
         .content {
             padding: 25px;
         }
-
 
         .header {
             text-align: center;
 
             margin-bottom: 25px;
         }
-
 
         .header h1 {
             margin: 0 0 8px 0;
@@ -128,15 +113,11 @@
             text-transform: none;
         }
 
-
         .header p {
             margin: 0;
 
             font-size: 13px;
         }
-
-
-        /* SUCCESS MESSAGE */
 
         .message {
             border: 2px solid #000;
@@ -163,13 +144,9 @@
             padding: 2px 5px;
         }
 
-
-        /* FORM */
-
         .form-group {
             margin-bottom: 18px;
         }
-
 
         label {
             display: block;
@@ -178,7 +155,6 @@
 
             font-weight: bold;
         }
-
 
         input {
             width: 100%;
@@ -198,15 +174,11 @@
             outline: none;
         }
 
-
         input:focus {
             background: #000;
 
             color: #fff;
         }
-
-
-        /* LOGIN BUTTON */
 
         .login-button {
             width: 100%;
@@ -233,13 +205,11 @@
                 3px 3px 0 #000;
         }
 
-
         .login-button:hover {
             background: #000;
 
             color: #fff;
         }
-
 
         .login-button:active {
             transform: translate(2px, 2px);
@@ -247,9 +217,6 @@
             box-shadow:
                 1px 1px 0 #000;
         }
-
-
-        /* SIGNUP */
 
         .signup {
             text-align: center;
@@ -261,7 +228,6 @@
             border-top: 3px double #000;
         }
 
-
         .signup a {
             color: #000;
 
@@ -270,7 +236,6 @@
             text-decoration: underline;
         }
 
-
         .signup a:hover {
             background: #000;
 
@@ -278,9 +243,6 @@
 
             text-decoration: none;
         }
-
-
-        /* FOOTER */
 
         .status-bar {
 
@@ -297,7 +259,6 @@
             font-size: 11px;
         }
 
-
         .status-indicator {
             display: inline-block;
 
@@ -310,7 +271,6 @@
 
             vertical-align: middle;
         }
-
 
         /* MOBILE */
 
@@ -344,9 +304,7 @@
 
         </div>
 
-
         <div class="content">
-
 
             <!-- Header -->
 
@@ -358,7 +316,6 @@
 
             </div>
 
-
             <!-- Success message -->
 
             <div th:if="${successMessage}" class="message">
@@ -368,11 +325,9 @@
 
             </div>
 
-
             <!-- Login form -->
 
             <form th:action="@{/login}" method="post">
-
 
                 <div class="form-group">
 
@@ -384,7 +339,6 @@
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label for="password">
@@ -395,14 +349,11 @@
 
                 </div>
 
-
                 <button type="submit" class="login-button">
                     LOG IN
                 </button>
 
-
             </form>
-
 
             <!-- Signup -->
 

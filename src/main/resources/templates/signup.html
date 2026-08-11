@@ -38,9 +38,6 @@
             padding: 20px;
         }
 
-
-        /* MAIN WINDOW */
-
         .window {
             width: 480px;
 
@@ -51,9 +48,6 @@
             box-shadow:
                 6px 6px 0 #000;
         }
-
-
-        /* TITLE BAR */
 
         .title-bar {
             height: 34px;
@@ -67,9 +61,6 @@
 
             padding: 0 8px;
         }
-
-
-        /* Macintosh window icon */
 
         .window-icon {
             width: 16px;
@@ -89,7 +80,6 @@
             background-size: 100% 4px;
         }
 
-
         .title {
             position: absolute;
 
@@ -106,20 +96,15 @@
             letter-spacing: 1px;
         }
 
-
-        /* CONTENT */
-
         .content {
             padding: 25px;
         }
-
 
         .header {
             text-align: center;
 
             margin-bottom: 22px;
         }
-
 
         .header h1 {
             margin: 0 0 8px 0;
@@ -129,20 +114,15 @@
             text-transform: uppercase;
         }
 
-
         .header p {
             margin: 0;
 
             font-size: 13px;
         }
 
-
-        /* FORM */
-
         .form-group {
             margin-bottom: 16px;
         }
-
 
         label {
             display: block;
@@ -151,7 +131,6 @@
 
             font-weight: bold;
         }
-
 
         input {
             width: 100%;
@@ -171,15 +150,11 @@
             outline: none;
         }
 
-
         input:focus {
             background: #000;
 
             color: #fff;
         }
-
-
-        /* VALIDATION ERRORS */
 
         .field-error {
             margin-top: 5px;
@@ -191,13 +166,9 @@
             font-size: 12px;
         }
 
-
         .field-error::before {
             content: "ERROR: ";
         }
-
-
-        /* ROLE SELECTION */
 
         .role-section {
             margin-top: 22px;
@@ -209,7 +180,6 @@
             padding: 12px;
         }
 
-
         .role-title {
             font-weight: bold;
 
@@ -220,20 +190,17 @@
             border-bottom: 1px solid #000;
         }
 
-
         .role-options {
             display: flex;
 
             gap: 12px;
         }
 
-
         .role-option {
             flex: 1;
 
             position: relative;
         }
-
 
         .role-option input {
             position: absolute;
@@ -242,7 +209,6 @@
 
             pointer-events: none;
         }
-
 
         .role-option label {
             display: block;
@@ -260,15 +226,11 @@
             margin: 0;
         }
 
-
         .role-option label:hover {
             background: #000;
 
             color: #fff;
         }
-
-
-        /* Selected radio button */
 
         .role-option input:checked+label {
             background: #000;
@@ -276,18 +238,13 @@
             color: #fff;
         }
 
-
         .role-option input:checked+label::before {
             content: "[X] ";
         }
 
-
         .role-option input:not(:checked)+label::before {
             content: "[ ] ";
         }
-
-
-        /* REGISTER BUTTON */
 
         .register-button {
             width: 100%;
@@ -314,13 +271,11 @@
                 3px 3px 0 #000;
         }
 
-
         .register-button:hover {
             background: #000;
 
             color: #fff;
         }
-
 
         .register-button:active {
             transform: translate(2px, 2px);
@@ -328,9 +283,6 @@
             box-shadow:
                 1px 1px 0 #000;
         }
-
-
-        /* LOGIN LINK */
 
         .login-link {
             text-align: center;
@@ -342,7 +294,6 @@
             border-top: 3px double #000;
         }
 
-
         .login-link a {
             color: #000;
 
@@ -351,7 +302,6 @@
             text-decoration: underline;
         }
 
-
         .login-link a:hover {
             background: #000;
 
@@ -359,9 +309,6 @@
 
             text-decoration: none;
         }
-
-
-        /* STATUS BAR */
 
         .status-bar {
 
@@ -378,7 +325,6 @@
             font-size: 11px;
         }
 
-
         .status-indicator {
             display: inline-block;
 
@@ -391,7 +337,6 @@
 
             vertical-align: middle;
         }
-
 
         /* MOBILE */
 
@@ -430,9 +375,7 @@
 
         </div>
 
-
         <div class="content">
-
 
             <!-- Header -->
 
@@ -448,11 +391,9 @@
 
             </div>
 
-
             <!-- Signup form -->
 
             <form th:action="@{/signup}" th:object="${user}" method="post">
-
 
                 <!-- Username -->
 
@@ -469,7 +410,6 @@
 
                 </div>
 
-
                 <!-- Email -->
 
                 <div class="form-group">
@@ -484,7 +424,6 @@
                     </div>
 
                 </div>
-
 
                 <!-- Password -->
 
@@ -501,7 +440,6 @@
 
                 </div>
 
-
                 <!-- Role -->
 
                 <div class="role-section">
@@ -510,9 +448,7 @@
                         ACCOUNT TYPE
                     </div>
 
-
                     <div class="role-options">
-
 
                         <!-- Client -->
 
@@ -526,7 +462,6 @@
 
                         </div>
 
-
                         <!-- Owner -->
 
                         <div class="role-option">
@@ -539,27 +474,20 @@
 
                         </div>
 
-
                     </div>
-
 
                     <div class="field-error" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">
                     </div>
 
                 </div>
 
-
                 <!-- Register -->
 
                 <button type="submit" class="register-button">
-
                     CREATE ACCOUNT
-
                 </button>
 
-
             </form>
-
 
             <!-- Login -->
 
