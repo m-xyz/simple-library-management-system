@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.libmanagementsys.vestas_proj.model.AddBookRequest;
 import com.libmanagementsys.vestas_proj.service.BookService;
@@ -31,6 +32,7 @@ public class OwnerController {
 
     @PostMapping("/add-book")
     public String addBook(@ModelAttribute("bookRequest") AddBookRequest bookRequest,
+            RedirectAttributes redirectAttributes,
             BindingResult result) {
 
         if (bookService.existsByIsbn(bookRequest.getIsbn())) {
@@ -44,8 +46,10 @@ public class OwnerController {
         }
 
         bookService.addBook(bookRequest);
+        redirectAttributes.addFlashAttribute("addBookSuccessMessage",
+                "Successfully added " + bookRequest.getStock() + " copies of \'" + bookRequest.getTitle() + "\' ("
+                        + bookRequest.getIsbn() + ")");
 
-        // TODO: Display confirmation that shows book was added
         return "redirect:/owner";
     }
 

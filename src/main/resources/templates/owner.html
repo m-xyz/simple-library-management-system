@@ -609,6 +609,53 @@
                 gap: 8px;
             }
         }
+
+        .success-message {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 25px;
+
+            padding: 12px 14px;
+
+            background: #fff;
+
+            border: 1px solid #000;
+
+            box-shadow:
+                4px 4px 0 #000;
+
+            font-weight: bold;
+        }
+
+        .success-icon {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 24px;
+            height: 24px;
+
+            flex-shrink: 0;
+
+            background: #00ff00;
+
+            border: 1px solid #000;
+
+            color: #000000;
+
+            font-family: "Courier New", monospace;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .success-text {
+            line-height: 1.4;
+        }
     </style>
 
 </head>
@@ -647,6 +694,11 @@
 
 
         <div class="content">
+
+            <div class="success-message" th:if="${addBookSuccessMessage}">
+                <div class="success-icon"> ✓ </div>
+                <div class="success-text" th:text="${addBookSuccessMessage}"> Book successfully added. </div>
+            </div>
 
 
             <!-- ================================================= -->
