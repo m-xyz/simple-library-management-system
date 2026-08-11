@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Library - Login</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            justify-content: center;
+
+            background: #ffffff;
+            color: #000000;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+
+            /* 1-bit Macintosh desktop texture */
+            background-image:
+                radial-gradient(#000 0.6px, transparent 0.6px);
+            background-size: 4px 4px;
+        }
+
+
+        /* LOGIN WINDOW */
+
+        .window {
+            width: 420px;
+
+            background: #fff;
+
+            border: 3px solid #000;
+
+            box-shadow:
+                6px 6px 0 #000;
+        }
+
+
+        /* TITLE BAR */
+
+        .title-bar {
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            border-bottom: 3px solid #000;
+
+            padding: 0 8px;
+        }
+
+
+        /* Classic Macintosh window icon */
+
+        .window-icon {
+            width: 16px;
+            height: 16px;
+
+            border: 2px solid #000;
+
+            margin-right: 10px;
+
+            background:
+                linear-gradient(to bottom,
+                    #000 0px,
+                    #000 2px,
+                    #fff 2px,
+                    #fff 4px);
+
+            background-size: 100% 4px;
+        }
+
+
+        .title {
+            position: absolute;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: #fff;
+
+            padding: 0 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* CONTENT */
+
+        .content {
+            padding: 25px;
+        }
+
+
+        .header {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+            margin: 0 0 8px 0;
+
+            font-size: 22px;
+
+            text-transform: none;
+        }
+
+
+        .header p {
+            margin: 0;
+
+            font-size: 13px;
+        }
+
+
+        /* SUCCESS MESSAGE */
+
+        .message {
+            border: 2px solid #000;
+
+            padding: 10px;
+
+            margin-bottom: 20px;
+
+            font-weight: bold;
+
+            background:
+                repeating-linear-gradient(45deg,
+                    #fff,
+                    #fff 2px,
+                    #000 2px,
+                    #000 3px);
+
+            background-size: 5px 5px;
+        }
+
+        .message span {
+            background: #fff;
+
+            padding: 2px 5px;
+        }
+
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+
+        label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+
+        input {
+            width: 100%;
+
+            padding: 9px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+
+            color: #000;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+
+        input:focus {
+            background: #000;
+
+            color: #fff;
+        }
+
+
+        /* LOGIN BUTTON */
+
+        .login-button {
+            width: 100%;
+
+            padding: 10px;
+
+            margin-top: 5px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+
+            color: #000;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                3px 3px 0 #000;
+        }
+
+
+        .login-button:hover {
+            background: #000;
+
+            color: #fff;
+        }
+
+
+        .login-button:active {
+            transform: translate(2px, 2px);
+
+            box-shadow:
+                1px 1px 0 #000;
+        }
+
+
+        /* SIGNUP */
+
+        .signup {
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding-top: 15px;
+
+            border-top: 3px double #000;
+        }
+
+
+        .signup a {
+            color: #000;
+
+            font-weight: bold;
+
+            text-decoration: underline;
+        }
+
+
+        .signup a:hover {
+            background: #000;
+
+            color: #fff;
+
+            text-decoration: none;
+        }
+
+
+        /* FOOTER */
+
+        .status-bar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top: 20px;
+
+            padding-top: 8px;
+
+            border-top: 1px solid #000;
+
+            font-size: 11px;
+        }
+
+
+        .status-indicator {
+            display: inline-block;
+
+            width: 9px;
+            height: 9px;
+
+            border: 2px solid #000;
+
+            margin-right: 4px;
+
+            vertical-align: middle;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .window {
+                width: 100%;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="window">
+
+        <!-- Macintosh title bar -->
+
+        <div class="title-bar">
+
+            <div class="window-icon"></div>
+
+            <div class="title">
+            </div>
+
+        </div>
+
+
+        <div class="content">
+
+
+            <!-- Header -->
+
+            <div class="header">
+
+                <h1>
+                    Library
+                </h1>
+
+            </div>
+
+
+            <!-- Success message -->
+
+            <div th:if="${successMessage}" class="message">
+
+                <span th:text="${successMessage}">
+                </span>
+
+            </div>
+
+
+            <!-- Login form -->
+
+            <form th:action="@{/login}" method="post">
+
+
+                <div class="form-group">
+
+                    <label for="username">
+                        USERNAME
+                    </label>
+
+                    <input type="text" id="username" name="username" autocomplete="username" required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        PASSWORD
+                    </label>
+
+                    <input type="password" id="password" name="password" autocomplete="current-password" required>
+
+                </div>
+
+
+                <button type="submit" class="login-button">
+                    LOG IN
+                </button>
+
+
+            </form>
+
+
+            <!-- Signup -->
+
+            <div class="signup">
+
+                <div>
+                    Don't have an account?
+                </div>
+
+                <br>
+
+                <a th:href="@{/signup}">
+                    CREATE NEW ACCOUNT
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
