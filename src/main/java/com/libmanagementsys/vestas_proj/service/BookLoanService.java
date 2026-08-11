@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.libmanagementsys.vestas_proj.model.Book;
 import com.libmanagementsys.vestas_proj.model.BookLoan;
 import com.libmanagementsys.vestas_proj.model.BookLoanId;
+import com.libmanagementsys.vestas_proj.model.LoanHistoryEntry;
 import com.libmanagementsys.vestas_proj.model.Transaction;
 import com.libmanagementsys.vestas_proj.model.User;
 import com.libmanagementsys.vestas_proj.repository.BookLoanRepository;
@@ -85,9 +86,9 @@ public class BookLoanService {
 
     @Transactional
     public void returnBook(Long transactionId, String isbn) {
-        //Transaction transaction = transactionRepo
-        //        .findById(transactionId)
-        //        .orElseThrow(() -> new RuntimeException("Transaction not found."));
+        // Transaction transaction = transactionRepo
+        // .findById(transactionId)
+        // .orElseThrow(() -> new RuntimeException("Transaction not found."));
         Book book = bookRepo
                 .findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -105,5 +106,19 @@ public class BookLoanService {
 
     public List<BookLoan> getActiveLoans(Long userId) {
         return bookLoanRepo.findActiveLoansByUserId(userId);
+    }
+
+    public List<LoanHistoryEntry> getLoanHistory() {
+        return bookLoanRepo.getLoanHistory().stream().map(
+                loan -> new LoanHistoryEntry(
+                        loan.getReturnDate() == null ? "ACTIVE" : "COMPLETED",
+                        loan.getTransaction().getUser().getUsername(),
+                        loan.getBook().getTitle(),
+                        loan.getBook().getIsbn(),
+                        loan.getTransaction().getRequestDate(),
+                        loan.getTransaction().getDueDate(),
+                        loan.getReturnDate(),
+                        loan.getFine()))
+                .toList();
     }
 }

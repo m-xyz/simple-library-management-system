@@ -48,4 +48,13 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
     Optional<BookLoan> findActiveLoan(
             @Param("transactionId") Long transactionId,
             @Param("isbn") String isbn);
+
+    @Query("""
+            SELECT bl
+            FROM BookLoan bl
+            JOIN bl.transaction t
+            JOIN bl.book b
+            ORDER BY t.requestDate DESC
+                """)
+    List<BookLoan> getLoanHistory();
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.libmanagementsys.vestas_proj.model.AddBookRequest;
+import com.libmanagementsys.vestas_proj.service.BookLoanService;
 import com.libmanagementsys.vestas_proj.service.BookService;
 
 import org.springframework.ui.Model;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class OwnerController {
 
     private final BookService bookService;
+    private final BookLoanService bookLoanService;
 
-    public OwnerController(BookService bookService) {
+    public OwnerController(BookService bookService, BookLoanService bookLoanService) {
         this.bookService = bookService;
+        this.bookLoanService = bookLoanService;
     }
 
     @GetMapping("/add-book")
@@ -51,6 +54,14 @@ public class OwnerController {
                         + bookRequest.getIsbn() + ")");
 
         return "redirect:/owner";
+    }
+
+    @GetMapping("/loan-history")
+    public String loanHistory(Model model) {
+
+        model.addAttribute("loanHistory", bookLoanService.getLoanHistory());
+
+        return "loan-history";
     }
 
 }
