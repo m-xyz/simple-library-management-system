@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class VestasProjApplication {
+public class SimpleLibraryManagementSystem {
 
 	public static void main(String[] args) {
-		SpringApplication.run(VestasProjApplication.class, args);
+		SpringApplication.run(SimpleLibraryManagementSystem.class, args);
 	}
 
 }
