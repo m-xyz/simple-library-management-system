@@ -290,8 +290,6 @@
             font-weight: bold;
         }
 
-        /* CLICKABLE ON-LOAN NUMBER */
-
         .loan-count {
             border: 0;
             background: transparent;
@@ -311,6 +309,12 @@
         .loan-count:hover {
             background: #000;
             color: #fff;
+        }
+
+        .loan-count:disabled {
+            cursor: default;
+            opacity: 0.5;
+            text-decoration: none;
         }
 
         /* ACTION BUTTONS */
@@ -663,13 +667,10 @@
 <body>
 
     <!-- ================================================= -->
-
     <!-- MAIN MACINTOSH WINDOW                             -->
-
     <!-- ================================================= -->
 
     <div class="window">
-
 
         <!-- Macintosh title bar -->
 
@@ -685,13 +686,11 @@
 
             </form>
 
-
             <div class="title">
                 Simple Library Management System
             </div>
 
         </div>
-
 
         <div class="content">
 
@@ -699,7 +698,6 @@
                 <div class="success-icon"> ✓ </div>
                 <div class="success-text" th:text="${addBookSuccessMessage}"> Book successfully added. </div>
             </div>
-
 
             <!-- ================================================= -->
             <!-- HEADER                                            -->
@@ -717,7 +715,6 @@
 
                 </h1>
 
-
                 <div class="datetime">
 
                     <div>
@@ -731,7 +728,6 @@
                 </div>
 
             </div>
-
 
             <!-- ================================================= -->
             <!-- MAIN BUTTONS                                      -->
@@ -749,7 +745,6 @@
                 </a>
 
             </div>
-
 
             <!-- ================================================= -->
             <!-- INVENTORY                                         -->
@@ -771,14 +766,15 @@
                             <th>ISBN</th>
                             <th>TITLE</th>
                             <th>AUTHOR</th>
-                            <th>STOCK</th>
-                            <th>ON LOAN</th>
+                            <th style="text-align: center;">STOCK</th>
+                            <th style="text-align: center;">ON LOAN</th>
                         </tr>
 
                     </thead>
 
                     <tbody>
-                        <tr th:each="book : ${books}">
+                        <tr th:each="book : ${books}"
+                            th:with="loanCount=${bookLoanService.getOnLoanCountByIsbn(book.isbn)}">
                             <td>
                                 <a>[E]</a>
                                 <a>[D]</a>
@@ -786,8 +782,13 @@
                             <td th:text="${book.isbn}">ISBN</td>
                             <td th:text="${book.title}">Title</td>
                             <td th:text="${book.author.name}">Author</td>
-                            <td th:text="${book.stock}">Stock</td>
-                            <td>666</td>
+                            <td style="text-align: center;" th:text="${book.stock}">Stock</td>
+                            <td style="text-align: center;">
+                                <button type="button" class="loan-count" th:text="${loanCount}"
+                                    th:attr="data-isbn=${book.isbn}" th:disabled="${loanCount == 0}"
+                                    th:onclick="${loanCount > 0} ? 'openLoanWindow(this.dataset.isbn)' : null">
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
 
@@ -800,10 +801,9 @@
     </div>
 
     <!-- ===================================================== -->
-
-    <!-- DRAGGABLE LOAN INFORMATION WINDOW                    -->
-
+    <!-- DRAGGABLE LOAN INFORMATION WINDOW                     -->
     <!-- ===================================================== -->
+
     <template id="loan-window-template">
 
 
@@ -820,7 +820,6 @@
                 </div>
 
             </div>
-
 
             <div class="loan-content">
 
@@ -851,27 +850,17 @@
                         <thead>
 
                             <tr>
-                                <th>USERNAME</th>
-                                <th>BORROWED</th>
-                                <th>DUE DATE</th>
+                                <th style="text-align: center;">USERNAME</th>
+                                <th style="text-align: center;">REQUEST DATE</th>
+                                <th style="text-align: center;">DUE DATE</th>
+                                <th style="text-align: center;">CURRENT FINE</th>
                             </tr>
 
                         </thead>
 
-                        <tbody class="loan-users"></tbody>
+                        <tbody class="loan-users" style="text-align: center;"></tbody>
 
                     </table>
-
-                </div>
-
-
-                <div class="loan-status">
-
-                    <span class="status-indicator"></span>
-
-                    <span class="loan-count-text">
-                        0 USERS CURRENTLY BORROWING
-                    </span>
 
                 </div>
 
@@ -881,8 +870,18 @@
 
     </template>
 
-    <script>
+    <script th:inline="javascript">
+        const loanData = {};
+    </script>
 
+    <script th:each="book : ${books}" th:inline="javascript">
+        Object.assign(
+            loanData,
+            /*[[${bookLoanService.getOnLoanByIsbn(book.isbn)}]]*/
+        );
+    </script>
+
+    <script>
 
         /* ========================================================= */
         /* DATE AND TIME                                             */
@@ -938,243 +937,76 @@
 
         let nextWindowOffset = 0;
 
-        /*
-        
-        * Mock loan data
-          */
-
-        const loanData = {
-
-
-            "9780000001": {
-
-                title: "The Hobbit",
-
-                users: [
-                    {
-                        username: "weird",
-                        borrowed: "01/08/2026",
-                        dueDate: "15/08/2026"
-                    },
-                    {
-                        username: "john_smith",
-                        borrowed: "03/08/2026",
-                        dueDate: "17/08/2026"
-                    }
-                ]
-
-            },
-
-
-            "9780000002": {
-
-                title: "Dune",
-
-                users: [
-                    {
-                        username: "alice",
-                        borrowed: "05/08/2026",
-                        dueDate: "19/08/2026"
-                    }
-                ]
-
-            },
-
-
-            "9780000003": {
-
-                title: "1984",
-
-                users: []
-
-            },
-
-
-            "9780000004": {
-
-                title: "Clean Code",
-
-                users: [
-                    {
-                        username: "developer01",
-                        borrowed: "02/08/2026",
-                        dueDate: "16/08/2026"
-                    },
-                    {
-                        username: "bob",
-                        borrowed: "04/08/2026",
-                        dueDate: "18/08/2026"
-                    },
-                    {
-                        username: "alice",
-                        borrowed: "06/08/2026",
-                        dueDate: "20/08/2026"
-                    }
-                ]
-
-            }
-
-
-        };
-
         /* ========================================================= */
         /* OPEN A NEW LOAN WINDOW                                   */
         /* ========================================================= */
 
-        function openLoanWindow(isbn) {
+        async function openLoanWindow(isbn) {
 
+            const response = await fetch(`/owner/loans/${encodeURIComponent(isbn)}`);
 
-            const book = loanData[isbn];
-
-            if (!book) {
+            if (!response.ok) {
+                console.error("Failed to retrieved loans for: " + isbn);
                 return;
             }
 
+            const loanData = await response.json();
+            const book = loanData[isbn];
 
-            /*
-             * Get the template
-             */
+            if (!book) return;
 
-            const template =
-                document.getElementById("loan-window-template");
-
-
-            /*
-             * Clone the template
-             */
-
-            const windowElement =
-                template.content
-                    .firstElementChild
-                    .cloneNode(true);
+            / * TEMPLATE */
+            const template = document.getElementById("loan-window-template");
 
 
-            /*
-             * Add it to the page
-             */
+            /* Clone the template */
+            const windowElement = template.content.firstElementChild.cloneNode(true);
 
+
+            /* Add it to the page */
             document.body.appendChild(windowElement);
 
 
-            /*
-             * Populate book information
-             */
+            /* Populate book information */
+            windowElement.querySelector(".loan-isbn").textContent = isbn;
+            windowElement.querySelector(".loan-book-title").textContent = book.title;
 
-            windowElement
-                .querySelector(".loan-isbn")
-                .textContent = isbn;
+            /* Populate users */
+            const tableBody = windowElement.querySelector(".loan-users");
 
+            book.users.forEach(user => {
 
-            windowElement
-                .querySelector(".loan-book-title")
-                .textContent = book.title;
-
-
-            /*
-             * Populate users
-             */
-
-            const tableBody =
-                windowElement.querySelector(".loan-users");
-
-
-            if (book.users.length === 0) {
-
-                const row =
-                    document.createElement("tr");
-
+                const row = document.createElement("tr");
 
                 row.innerHTML = `
-        <td colspan="3">
-            NO USERS CURRENTLY
-            BORROWING THIS BOOK.
-        </td>
-    `;
-
+                    <td>${user.username}</td>
+                    <td>${user.requestDate}</td>
+                    <td>${user.dueDate}</td>
+                    <td>${user.fine} €</td>
+                `;
 
                 tableBody.appendChild(row);
 
-            } else {
+            });
 
-                book.users.forEach(user => {
+            /* Window entropy starting pos */
 
-                    const row =
-                        document.createElement("tr");
-
-
-                    row.innerHTML = `
-            <td>${user.username}</td>
-            <td>${user.borrowed}</td>
-            <td>${user.dueDate}</td>
-        `;
+            const offset = nextWindowOffset % 5;
+            windowElement.style.left = (180 + offset * 35) + "px";
+            windowElement.style.top = (120 + offset * 35) + "px";
 
 
-                    tableBody.appendChild(row);
-
-                });
-
-            }
-
-
-            /*
-             * Update loan count
-             */
-
-            windowElement
-                .querySelector(".loan-count-text")
-                .textContent =
-
-                book.users.length +
-                " USER" +
-                (book.users.length === 1 ? "" : "S") +
-                " CURRENTLY BORROWING";
-
-
-            /*
-             * Give each new window a slightly
-             * different starting position.
-             */
-
-            const offset =
-                nextWindowOffset % 5;
-
-
-            windowElement.style.left =
-                (180 + offset * 35) + "px";
-
-
-            windowElement.style.top =
-                (120 + offset * 35) + "px";
-
-
-            /*
-             * Latest windows opened goes to the front
-             */
+            /* Latest windows opened goes to the front */
 
             bringToFront(windowElement);
 
-
-            /*
-             * Close button
-             */
-
-            const closeButton =
-                windowElement.querySelector(".loan-close");
-
-
+            const closeButton = windowElement.querySelector(".loan-close");
             closeButton.addEventListener(
                 "click",
                 function () {
-
                     windowElement.remove();
-
                 }
             );
-
-
-            /*
-             * Make this particular window draggable.
-             */
 
             makeDraggable(
                 windowElement,
@@ -1182,37 +1014,29 @@
             );
 
 
-            /*
-             * Bring this window to the front
-             * when clicked.
-             */
+            /* Bring this window to the front when clicked. */
 
             windowElement.addEventListener(
                 "mousedown",
                 function () {
-
                     bringToFront(windowElement);
-
                 }
             );
-
 
         }
 
         /* ========================================================= */
-        /* BRING WINDOW TO FRONT                                    */
+        /* BRING WINDOW TO FRONT                                     */
         /* ========================================================= */
 
         let highestZIndex = 1000;
 
         function bringToFront(windowElement) {
 
-
             highestZIndex++;
 
             windowElement.style.zIndex =
                 highestZIndex;
-
 
         }
 
@@ -1222,26 +1046,15 @@
 
         function makeDraggable(windowElement, titleBar) {
 
-
             let isDragging = false;
 
             let offsetX = 0;
 
             let offsetY = 0;
 
-
-            /*
-             * Start dragging
-             */
-
             titleBar.addEventListener(
                 "mousedown",
                 function (event) {
-
-                    /*
-                     * Don't start dragging when
-                     * clicking the close button.
-                     */
 
                     if (
                         event.target.closest(".loan-close")
@@ -1249,63 +1062,34 @@
                         return;
                     }
 
-
                     bringToFront(windowElement);
-
 
                     isDragging = true;
 
+                    const rect = windowElement.getBoundingClientRect();
 
-                    const rect =
-                        windowElement.getBoundingClientRect();
-
-
-                    offsetX =
-                        event.clientX - rect.left;
-
-
-                    offsetY =
-                        event.clientY - rect.top;
+                    offsetX = event.clientX - rect.left;
+                    offsetY = event.clientY - rect.top;
 
                 }
             );
-
-
-            /*
-             * Move window
-             */
 
             document.addEventListener(
                 "mousemove",
                 function (event) {
 
-                    if (!isDragging) {
-                        return;
-                    }
+                    if (!isDragging) return
 
-
-                    let newX =
-                        event.clientX - offsetX;
-
-
-                    let newY =
-                        event.clientY - offsetY;
-
-
-                    /*
-                     * Keep the window inside
-                     * the browser viewport.
-                     */
+                    let newX = event.clientX - offsetX;
+                    let newY = event.clientY - offsetY;
 
                     const maxX =
                         window.innerWidth -
                         windowElement.offsetWidth;
 
-
                     const maxY =
                         window.innerHeight -
                         windowElement.offsetHeight;
-
 
                     newX =
                         Math.max(
@@ -1313,67 +1097,48 @@
                             Math.min(newX, maxX)
                         );
 
-
                     newY =
                         Math.max(
                             0,
                             Math.min(newY, maxY)
                         );
 
-
-                    windowElement.style.left =
-                        newX + "px";
-
-
-                    windowElement.style.top =
-                        newY + "px";
+                    windowElement.style.left = newX + "px";
+                    windowElement.style.top = newY + "px";
 
                 }
             );
-
-
-            /*
-             * Stop dragging
-             */
 
             document.addEventListener(
                 "mouseup",
                 function () {
-
                     isDragging = false;
-
                 }
             );
-
 
         }
 
         /* ========================================================= */
-        /* ESC CLOSES ALL OPEN LOAN WINDOWS                         */
+        /* ESC CLOSES ALL OPEN LOAN WINDOWS                          */
         /* ========================================================= */
 
         document.addEventListener(
             "keydown",
             function (event) {
 
-
                 if (event.key === "Escape") {
 
                     document
                         .querySelectorAll(".loan-window")
                         .forEach(windowElement => {
-
                             windowElement.remove();
-
                         });
 
                 }
 
             }
 
-
         );
-
 
     </script>
 

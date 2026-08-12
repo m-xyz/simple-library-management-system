@@ -57,4 +57,14 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
             ORDER BY t.requestDate DESC
                 """)
     List<BookLoan> getLoanHistory();
+
+    @Query("""
+            SELECT bl, t
+            FROM BookLoan bl
+            JOIN bl.transaction t
+            JOIN bl.book b
+            WHERE bl.id.isbn = :isbn
+            AND bl.returnDate IS NULL
+                """)
+    List<BookLoan> getOnLoanByIsbn(@Param("isbn") String isbn);
 }

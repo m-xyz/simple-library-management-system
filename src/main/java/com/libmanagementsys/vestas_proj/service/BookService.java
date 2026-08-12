@@ -1,6 +1,7 @@
 package com.libmanagementsys.vestas_proj.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,10 @@ public class BookService {
 
     public List<Book> getAllBooks() {
         return bookRepo.findAll();
+    }
+
+    public Optional<Book> findByIsbn(String isbn) {
+        return bookRepo.findById(isbn);
     }
 
     public boolean existsByIsbn(String isbn) {

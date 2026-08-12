@@ -1,6 +1,7 @@
 package com.libmanagementsys.vestas_proj.controller;
 
 import com.libmanagementsys.vestas_proj.repository.UserRepository;
+import com.libmanagementsys.vestas_proj.service.BookLoanService;
 import com.libmanagementsys.vestas_proj.service.BookService;
 import com.libmanagementsys.vestas_proj.service.UserService;
 
@@ -22,11 +23,14 @@ public class AppController {
     private final BookService bookService;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final BookLoanService bookLoanService;
 
-    AppController(UserService userService, UserRepository userRepository, BookService bookService) {
+    AppController(UserService userService, UserRepository userRepository, BookService bookService,
+            BookLoanService bookLoanService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.bookService = bookService;
+        this.bookLoanService = bookLoanService;
     }
 
     @GetMapping("/")
@@ -56,6 +60,8 @@ public class AppController {
     public String ownerHome(Model model, Authentication auth) {
         model.addAttribute("username", auth.getName());
         model.addAttribute("books", bookService.getAllBooks());
+        model.addAttribute("bookLoanService", bookLoanService);
+
         return "owner";
     }
 
@@ -63,6 +69,7 @@ public class AppController {
     public String clientHome(Model model, Authentication auth) {
         model.addAttribute("username", auth.getName());
         model.addAttribute("books", bookService.getAllBooks());
+
         return "client";
     }
 

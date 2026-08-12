@@ -48,13 +48,11 @@ public class ClientController {
                 .filter(isbns::contains)
                 .toList();
 
-        String errorDupeMessage = dupeLoans.size() > 1 ? "You already have the following books on loan: "
-                : "You already have the following book on loan: ";
-
         if (!dupeLoans.isEmpty()) {
             redirectAttributes.addFlashAttribute(
                     "errorMessage",
-                    errorDupeMessage + String.join(", ", dupeLoans));
+                    "You already have the following "
+                            + (dupeLoans.size() > 1 ? "books" : "book") + " on loan: " + String.join(", ", dupeLoans));
             // Pass dupes
             redirectAttributes.addFlashAttribute("duplicateIsbns", dupeLoans);
             // Pass user selected
@@ -64,8 +62,9 @@ public class ClientController {
         }
 
         bookLoanService.loanBooks(user, isbns);
-        String sMessage = isbns.size() > 1 ? "Books successfully borrowed: " : "Book successfully borrowed: ";
-        redirectAttributes.addFlashAttribute("successMessage", sMessage + String.join(", ", isbns));
+
+        redirectAttributes.addFlashAttribute("successMessage",
+                (isbns.size() > 1 ? "Books" : "Book") + " successfully borrowed: " + String.join(", ", isbns));
 
         return "redirect:/client";
     }

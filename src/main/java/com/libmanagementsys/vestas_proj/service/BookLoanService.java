@@ -2,7 +2,11 @@ package com.libmanagementsys.vestas_proj.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -47,7 +51,7 @@ public class BookLoanService {
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setRequestDate(LocalDate.now());
-        transaction.setDueDate(LocalDate.now().plusDays(14));
+        transaction.setDueDate(LocalDate.now().plusDays(7));
         transaction = transactionRepo.save(transaction);
 
         // createBookLoans()
@@ -120,5 +124,44 @@ public class BookLoanService {
                         loan.getReturnDate(),
                         loan.getFine()))
                 .toList();
+    }
+
+    public HashMap<String, HashMap<String, Object>> getOnLoanByIsbn(String isbn) {
+        List<BookLoan> b = bookLoanRepo.getOnLoanByIsbn(isbn);
+        HashMap<String, HashMap<String, Object>> entry = new HashMap<>();
+
+        if (!b.isEmpty()) {
+
+            HashMap<String, Object> book = new HashMap<>();
+
+            // TITLE
+            Book bb = bookRepo.findByIsbn(isbn).orElseThrow();
+            book.put("title", bb.getTitle());
+
+            // USERS
+            List<HashMap<String, String>> users = new ArrayList<>();
+
+            for (BookLoan bl : b.stream().toList()) {
+                HashMap<String, String> userEntry = new HashMap<>();
+                userEntry.put("username", bl.getTransaction().getUser().getUsername());
+                userEntry.put("requestDate",
+                        bl.getTransaction().getRequestDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                userEntry.put("dueDate",
+                        bl.getTransaction().getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                userEntry.put("fine", bl.getFine().toString());
+                users.add(userEntry);
+            }
+
+            book.put("users", users);
+            entry.put(isbn, book);
+
+        }
+
+        return entry;
+
+    }
+
+    public int getOnLoanCountByIsbn(String isbn) {
+        return bookLoanRepo.getOnLoanByIsbn(isbn).size();
     }
 }
