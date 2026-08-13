@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.libmanagementsys.vestas_proj.model.AppProperties;
 import com.libmanagementsys.vestas_proj.model.BookLoan;
 import com.libmanagementsys.vestas_proj.model.User;
 import com.libmanagementsys.vestas_proj.service.BookLoanService;
@@ -25,10 +26,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ClientController {
     private final UserService userService;
     private final BookLoanService bookLoanService;
+    private final AppProperties appProperties;
 
-    public ClientController(UserService userService, BookLoanService bookLoanService) {
+    public ClientController(UserService userService, BookLoanService bookLoanService, AppProperties appProperties) {
         this.userService = userService;
         this.bookLoanService = bookLoanService;
+        this.appProperties = appProperties;
     }
 
     @PostMapping("/borrow")
@@ -74,6 +77,7 @@ public class ClientController {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<BookLoan> loans = bookLoanService.getActiveLoans(user.getId());
         model.addAttribute("bookLoans", loans);
+        model.addAttribute("appProperties", appProperties);
 
         return "return-book";
     }

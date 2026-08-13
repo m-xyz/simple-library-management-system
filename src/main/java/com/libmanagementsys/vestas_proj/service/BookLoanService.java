@@ -6,11 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.libmanagementsys.vestas_proj.model.AppProperties;
 import com.libmanagementsys.vestas_proj.model.Book;
 import com.libmanagementsys.vestas_proj.model.BookLoan;
 import com.libmanagementsys.vestas_proj.model.BookLoanId;
@@ -28,14 +28,17 @@ public class BookLoanService {
     private final BookRepository bookRepo;
     private final TransactionRepository transactionRepo;
     private final BookLoanRepository bookLoanRepo;
+    private final AppProperties appProperties;
 
     public BookLoanService(
             BookRepository bookRepo,
             TransactionRepository transactionRepo,
-            BookLoanRepository bookLoanRepo) {
+            BookLoanRepository bookLoanRepo,
+            AppProperties appProperties) {
         this.bookRepo = bookRepo;
         this.transactionRepo = transactionRepo;
         this.bookLoanRepo = bookLoanRepo;
+        this.appProperties = appProperties;
     }
 
     // TODO: Create function for each step
@@ -51,7 +54,7 @@ public class BookLoanService {
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setRequestDate(LocalDate.now());
-        transaction.setDueDate(LocalDate.now().plusDays(7));
+        transaction.setDueDate(LocalDate.now().plusDays(appProperties.getBookBorrowDays()));
         transaction = transactionRepo.save(transaction);
 
         // createBookLoans()
@@ -78,9 +81,7 @@ public class BookLoanService {
             bookLoan.setId(bookLoanId); // Set composite PK
             bookLoan.setTransaction(transaction);
             bookLoan.setBook(book);
-            // Book has yet to be returned (TODO: Improve this maybe)
-            bookLoan.setReturnDate(null);
-            // No fine
+            bookLoan.setReturnDate(null); // NULL returnDate means book is still on loan
             bookLoan.setFine(BigDecimal.ZERO);
             bookLoanRepo.save(bookLoan);
 
@@ -90,9 +91,6 @@ public class BookLoanService {
 
     @Transactional
     public void returnBook(Long transactionId, String isbn) {
-        // Transaction transaction = transactionRepo
-        // .findById(transactionId)
-        // .orElseThrow(() -> new RuntimeException("Transaction not found."));
         Book book = bookRepo
                 .findByIsbn(isbn)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
@@ -103,7 +101,8 @@ public class BookLoanService {
         book.addStock(1);
 
         // Write to DB
-        bookLoanRepo.returnBook(transactionId, isbn, LocalDate.now(), bookLoan.getFine());
+        bookLoanRepo.returnBook(transactionId, isbn, LocalDate.now(),
+                bookLoan.calculateFine(appProperties.getLateReturnFee()));
         bookRepo.save(book);
 
     }
@@ -148,7 +147,7 @@ public class BookLoanService {
                         bl.getTransaction().getRequestDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 userEntry.put("dueDate",
                         bl.getTransaction().getDueDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                userEntry.put("fine", bl.getFine().toString());
+                userEntry.put("fine", bl.calculateFine(appProperties.getLateReturnFee()).toString());
                 users.add(userEntry);
             }
 

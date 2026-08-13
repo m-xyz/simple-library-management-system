@@ -63,10 +63,6 @@
             background-size: 100% 4px;
         }
 
-        /*
-         * MACINTOSH TITLE BAR
-         */
-
         .title-bar {
             height: 34px;
 
@@ -81,11 +77,6 @@
 
             position: relative;
         }
-
-
-        /*
-         * CLOSE BUTTON
-         */
 
         .close-button {
             width: 18px;
@@ -118,11 +109,6 @@
             color: #fff;
         }
 
-
-        /*
-         * TITLE
-         */
-
         .title {
             position: absolute;
 
@@ -139,19 +125,9 @@
             letter-spacing: 1px;
         }
 
-
-        /*
-         * CONTENT
-         */
-
         .content {
             padding: 25px;
         }
-
-
-        /*
-         * HEADER
-         */
 
         .page-header {
             margin-bottom: 25px;
@@ -180,11 +156,6 @@
 
             line-height: 1.5;
         }
-
-
-        /*
-         * TOOLBAR
-         */
 
         .toolbar {
             display: flex;
@@ -232,11 +203,6 @@
                 1px 1px 0 #000;
         }
 
-
-        /*
-         * SECTION TITLE
-         */
-
         .section-title {
             font-weight: bold;
 
@@ -252,11 +218,6 @@
 
             letter-spacing: 1px;
         }
-
-
-        /*
-         * LOG TABLE
-         */
 
         .table-wrapper {
             border: 2px solid #000;
@@ -274,7 +235,6 @@
             min-width: 950px;
         }
 
-
         th {
             background: #fff;
 
@@ -291,7 +251,6 @@
             white-space: nowrap;
         }
 
-
         td {
             padding: 10px;
 
@@ -299,11 +258,6 @@
 
             white-space: nowrap;
         }
-
-
-        /*
-         * ALTERNATING PIXEL ROWS
-         */
 
         tbody tr:nth-child(even) {
             background: repeating-linear-gradient(45deg,
@@ -319,21 +273,11 @@
             background: rgba(255, 255, 255, 0.88);
         }
 
-
-        /*
-         * ROW HOVER
-         */
-
         tbody tr:hover td {
             background: #000;
 
             color: #fff;
         }
-
-
-        /*
-         * ACTION TYPE
-         */
 
         .action {
             font-weight: bold;
@@ -368,11 +312,6 @@
 
             border-color: #fff;
         }
-
-
-        /*
-         * ISBN
-         */
 
         .isbn {
             font-family: "Courier New", monospace;
@@ -446,21 +385,18 @@
             margin-left: auto;
         }
 
-        /* * ACTIVE LOAN */
         .loan-status {
             background: #dcecff;
             color: #003399;
             border-color: #003399;
         }
 
-        /* * COMPLETED LOAN */
         .loan-done-status {
             background: #dcf5dc;
             color: #006600;
             border-color: #006600;
         }
 
-        /* * HOVER */
         tbody tr:hover .loan-status,
         tbody tr:hover .loan-done-status {
             background: #000;
@@ -468,10 +404,7 @@
             border-color: #fff;
         }
 
-
-        /*
-         * MOBILE
-         */
+        /* MOBILE */
 
         @media (max-width: 700px) {
 
@@ -501,11 +434,9 @@
 
 </head>
 
-
 <body>
 
     <div class="window">
-
 
         <!-- ============================================= -->
         <!-- MACINTOSH TITLE BAR                           -->
@@ -521,16 +452,14 @@
 
         </div>
 
-
         <!-- ============================================= -->
         <!-- CONTENT                                       -->
         <!-- ============================================= -->
 
         <div class="content">
 
-
             <!-- ========================================= -->
-            <!-- PAGE HEADER                                -->
+            <!-- PAGE HEADER                               -->
             <!-- ========================================= -->
 
             <div class="page-header">
@@ -541,9 +470,8 @@
 
             </div>
 
-
             <!-- ========================================= -->
-            <!-- ACTIONS                                    -->
+            <!-- ACTIONS                                   -->
             <!-- ========================================= -->
 
             <div class="toolbar">
@@ -553,15 +481,13 @@
 
             </div>
 
-
             <!-- ========================================= -->
-            <!-- LOG HISTORY                                -->
+            <!-- LOG HISTORY                               -->
             <!-- ========================================= -->
 
             <div class="section-title">
                 TRANSACTION HISTORY
             </div>
-
 
             <div class="table-wrapper">
 
@@ -583,7 +509,6 @@
                         </tr>
 
                     </thead>
-
 
                     <tbody>
 

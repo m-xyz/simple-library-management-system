@@ -16,7 +16,6 @@ import com.libmanagementsys.vestas_proj.service.BookService;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -63,7 +62,6 @@ public class OwnerController {
 
     @GetMapping("/loan-history")
     public String loanHistory(Model model) {
-
         model.addAttribute("loanHistory", bookLoanService.getLoanHistory());
 
         return "loan-history";

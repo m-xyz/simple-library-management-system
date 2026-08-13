@@ -212,9 +212,6 @@
             border-bottom: 1px solid #000;
         }
 
-
-        /* ALTERNATING PIXEL ROWS */
-
         tbody tr:nth-child(even) {
             background:
                 repeating-linear-gradient(45deg,
@@ -524,10 +521,8 @@
             <div class="welcome">
 
                 <div class="back-bar">
-
                     <a th:href="@{/client}" class="back-button">
                         < BACK </a>
-
                 </div>
 
                 <div class="datetime">
@@ -581,23 +576,20 @@
                             <!-- LOANS                             -->
                             <!-- ================================= -->
 
-                            <tr th:each="loan : ${bookLoans}">
+                            <tr th:each="loan : ${bookLoans}"
+                                th:with="loanFine=${loan.calculateFine(appProperties.getLateReturnFee())}">
 
                                 <td>
                                     <input type="checkbox" class="loan-checkbox" name="loanIds"
                                         th:value="${loan.id.transactionId + ':' + loan.id.isbn}">
                                 </td>
 
-                                <td class="isbn" th:text="${loan.book.isbn}">
-                                    ISBN
-                                </td>
+                                <td class="isbn" th:text="${loan.book.isbn}"></td>
 
-                                <td class="book-title" th:text="${loan.book.title}">
-                                    Book title
-                                </td>
+                                <td class="book-title" th:text="${loan.book.title}"></td>
 
                                 <td class="date" th:text="${#temporals.format(loan.transaction.dueDate, 'dd/MM/yyyy')}">
-                                    09/08/2026
+
                                 </td>
 
                                 <td>
@@ -612,12 +604,11 @@
                                 </td>
 
                                 <td class="fine">
-                                    <span th:if="${loan.fine.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
-                                        class="fine-due" th:text="${loan.fine + ' €'}">
-                                        X.XX €
+                                    <span th:if="${loanFine.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
+                                        class="fine-due" th:text="${loanFine + ' €'}">
                                     </span>
 
-                                    <span th:unless="${loan.fine.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
+                                    <span th:unless="${loanFine.compareTo(T(java.math.BigDecimal).ZERO) > 0}"
                                         class="fine-none">
                                         0.00 €
                                     </span>

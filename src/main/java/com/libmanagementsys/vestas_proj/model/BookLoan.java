@@ -60,29 +60,29 @@ public class BookLoan {
         this.returnDate = returnDate;
     }
 
-    //public BigDecimal getFine() {
-    //    return this.fine;
-    //}
+    public BigDecimal getFine() {
+        return this.fine;
+    }
 
     public void setFine(BigDecimal fine) {
         this.fine = fine;
     }
 
     @Transient
-    public BigDecimal getFine() {
-        if(this.transaction == null || transaction.getDueDate() == null) {
+    public BigDecimal calculateFine(String fineFee) {
+        if (this.transaction == null || transaction.getDueDate() == null) {
             return BigDecimal.ZERO;
         }
 
         LocalDate today = LocalDate.now();
-        if(!today.isAfter(this.transaction.getDueDate())) {
+
+        if (!today.isAfter(this.transaction.getDueDate())) {
             return BigDecimal.ZERO;
         }
 
         long daysLate = ChronoUnit.DAYS.between(this.transaction.getDueDate(), today);
 
-        // TODO: Figure out better way to store fine fee
-        return new BigDecimal("0.50").multiply(BigDecimal.valueOf(daysLate));
+        return new BigDecimal(fineFee).multiply(BigDecimal.valueOf(daysLate));
     }
 
 }
