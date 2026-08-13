@@ -1,7 +1,9 @@
 package com.libmanagementsys.vestas_proj.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/owner")
@@ -38,7 +42,8 @@ public class OwnerController {
     }
 
     @PostMapping("/add-book")
-    public String addBook(@ModelAttribute("bookRequest") AddBookRequest bookRequest,
+    public String addBook(
+            @ModelAttribute("bookRequest") AddBookRequest bookRequest,
             RedirectAttributes redirectAttributes,
             BindingResult result) {
 
@@ -54,7 +59,9 @@ public class OwnerController {
 
         bookService.addBook(bookRequest);
         redirectAttributes.addFlashAttribute("addBookSuccessMessage",
-                "Successfully added " + bookRequest.getStock() + " copies of \'" + bookRequest.getTitle() + "\' ("
+                "Successfully added " + bookRequest.getStock()
+                        + (bookRequest.getStock() > 1 ? " copies of" : " copy of") + " \'" + bookRequest.getTitle()
+                        + "\' ("
                         + bookRequest.getIsbn() + ")");
 
         return "redirect:/owner";
@@ -71,6 +78,19 @@ public class OwnerController {
     @ResponseBody
     public HashMap<String, HashMap<String, Object>> getLoans(@PathVariable String isbn) {
         return bookLoanService.getOnLoanByIsbn(isbn);
+    }
+
+    @PutMapping("/edit-book/{isbn}")
+    public ResponseEntity<?> editBook(
+            @PathVariable String isbn,
+            @RequestBody Map<String, Object> data) {
+        bookService.addBook(new AddBookRequest(
+                isbn,
+                (String) data.get("title"),
+                (String) data.get("author"),
+                (Integer) data.get("stock")));
+
+        return ResponseEntity.ok().build();
     }
 
 }

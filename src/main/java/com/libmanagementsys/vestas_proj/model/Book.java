@@ -16,6 +16,16 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
+    public Book(String isbn, String title, Author author, int stock) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.stock = stock;
+    }
+
+    public Book() {
+    }
+
     public String getId() {
         return this.isbn;
     }

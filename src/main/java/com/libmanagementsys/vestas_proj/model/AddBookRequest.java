@@ -6,6 +6,16 @@ public class AddBookRequest {
     private String authorName;
     private int stock;
 
+    public AddBookRequest(String isbn, String title, String authorName, int stock) {
+        this.isbn = isbn;
+        this.title = title;
+        this.authorName = authorName;
+        this.stock = stock;
+    }
+
+    public AddBookRequest() {
+    }
+
     public String getIsbn() {
         return isbn;
     }

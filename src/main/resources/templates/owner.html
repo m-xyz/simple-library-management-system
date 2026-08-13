@@ -5,6 +5,8 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
     <title>Simple Library Management System</title>
 
@@ -288,6 +290,27 @@
         .quantity {
             text-align: center;
             font-weight: bold;
+        }
+
+        .delete-button {
+            border: 0;
+            background: transparent;
+
+            color: inherit;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            font-weight: bold;
+
+            text-decoration: underline;
+
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .delete-button:hover {
+            background: #000;
+            color: #fff;
         }
 
         .loan-count {
@@ -660,6 +683,339 @@
         .success-text {
             line-height: 1.4;
         }
+
+        .delete-window {
+            position: fixed;
+
+            width: 450px;
+            max-width: 90vw;
+
+            background: #fff;
+            color: #000;
+
+            border: 3px solid #000;
+
+            box-shadow: 7px 7px 0 #000;
+
+            z-index: 2000;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+        }
+
+        .delete-title-bar {
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            border-bottom: 3px solid #000;
+
+            background: #fff;
+
+            user-select: none;
+        }
+
+        .delete-close {
+            width: 18px;
+            height: 18px;
+
+            margin-left: 7px;
+
+            padding: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid #000;
+
+            background: #fff;
+            color: #000;
+
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+
+            line-height: 12px;
+
+            cursor: pointer;
+        }
+
+        .delete-close:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .delete-title {
+            position: absolute;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            padding: 0 12px;
+
+            background: #fff;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            white-space: nowrap;
+        }
+
+        .delete-content {
+            padding: 25px;
+        }
+
+        .delete-message {
+            margin-bottom: 25px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+            line-height: 1.5;
+        }
+
+        .delete-book-title {
+            background: #000;
+            color: #fff;
+
+            padding: 2px 5px;
+        }
+
+        .delete-actions {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+        }
+
+        .delete-actions button {
+            min-width: 90px;
+
+            padding: 7px 12px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+            color: #000;
+
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .delete-actions button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .delete-actions button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #000;
+        }
+
+        .edit-button {
+            border: 0;
+            background: transparent;
+
+            color: inherit;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            font-weight: bold;
+
+            text-decoration: underline;
+
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .edit-button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .edit-window {
+            position: fixed;
+
+            width: 500px;
+            max-width: 90vw;
+
+            background: #fff;
+            color: #000;
+
+            border: 3px solid #000;
+
+            box-shadow: 7px 7px 0 #000;
+
+            z-index: 2000;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+        }
+
+        .edit-title-bar {
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            border-bottom: 3px solid #000;
+
+            background: #fff;
+
+            user-select: none;
+        }
+
+        .edit-close {
+            width: 18px;
+            height: 18px;
+
+            margin-left: 7px;
+
+            padding: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid #000;
+
+            background: #fff;
+            color: #000;
+
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+
+            line-height: 12px;
+
+            cursor: pointer;
+        }
+
+        .edit-close:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .edit-title {
+            position: absolute;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            padding: 0 12px;
+
+            background: #fff;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+
+            white-space: nowrap;
+        }
+
+        .edit-content {
+            padding: 25px;
+        }
+
+        .edit-field {
+            display: flex;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+        .edit-field label {
+            width: 90px;
+
+            font-weight: bold;
+        }
+
+        .edit-field input {
+            flex: 1;
+
+            padding: 7px 8px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+            color: #000;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .edit-field input:focus {
+            background: #000;
+            color: #fff;
+        }
+
+        .edit-field input:read-only {
+            background: #eee;
+            color: #555;
+
+            cursor: not-allowed;
+        }
+
+        .edit-actions {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+        .edit-actions button {
+            min-width: 100px;
+
+            padding: 7px 12px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+            color: #000;
+
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow: 3px 3px 0 #000;
+        }
+
+        .edit-actions button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .edit-actions button:active {
+            transform: translate(2px, 2px);
+
+            box-shadow: 1px 1px 0 #000;
+        }
     </style>
 
 </head>
@@ -694,9 +1050,11 @@
 
         <div class="content">
 
+            <div id="success-message-container"></div>
+
             <div class="success-message" th:if="${addBookSuccessMessage}">
                 <div class="success-icon"> ✓ </div>
-                <div class="success-text" th:text="${addBookSuccessMessage}"> Book successfully added. </div>
+                <div class="success-text" th:text="${addBookSuccessMessage}"></div>
             </div>
 
             <!-- ================================================= -->
@@ -754,7 +1112,6 @@
                 BOOK INVENTORY
             </div>
 
-
             <div class="table-wrapper">
 
                 <table>
@@ -776,8 +1133,23 @@
                         <tr th:each="book : ${books}"
                             th:with="loanCount=${bookLoanService.getOnLoanCountByIsbn(book.isbn)}">
                             <td>
-                                <a>[E]</a>
-                                <a>[D]</a>
+                                <button type="button" class="edit-button" th:attr="
+                                        data-isbn=${book.isbn},
+                                        data-title=${book.title},
+                                        data-author=${book.author.name},
+                                        data-stock=${book.stock}," onclick="openEditWindow(
+                                        this.dataset.isbn,
+                                        this.dataset.title,
+                                        this.dataset.author,
+                                        this.dataset.stock,
+                                    )">
+                                    [EDIT]
+                                </button>
+                                <button type="button" class="delete-button"
+                                    th:attr="data-isbn=${book.isbn},data-title=${book.title}"
+                                    onclick="openDeleteWindow(this.dataset.isbn, this.dataset.title)">
+                                    [DELETE]
+                                </button>
                             </td>
                             <td th:text="${book.isbn}">ISBN</td>
                             <td th:text="${book.title}">Title</td>
@@ -870,6 +1242,123 @@
 
     </template>
 
+    <template id="delete-window-template">
+
+        <div class="delete-window">
+
+            <div class="delete-title-bar">
+
+                <button type="button" class="delete-close">
+                    ×
+                </button>
+
+                <div class="delete-title">
+                    DELETE BOOK
+                </div>
+
+            </div>
+
+            <div class="delete-content">
+
+                <div class="delete-message">
+                    Are you sure you want to delete
+                    <span class="delete-book-title"></span>?
+                </div>
+
+                <div class="delete-actions">
+
+                    <button type="button" class="delete-confirm">
+                        [YES]
+                    </button>
+
+                    <button type="button" class="delete-cancel">
+                        [NO]
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </template>
+
+    <template id="edit-window-template">
+
+        <div class="edit-window">
+
+            <div class="edit-title-bar">
+
+                <button type="button" class="edit-close">
+                    ×
+                </button>
+
+                <div class="edit-title">
+                    EDIT BOOK
+                </div>
+
+            </div>
+
+            <div class="edit-content">
+
+                <div class="edit-field">
+
+                    <label for="edit-isbn">
+                        ISBN
+                    </label>
+
+                    <input type="text" id="edit-isbn" class="edit-isbn" readonly>
+
+                </div>
+
+                <div class="edit-field">
+
+                    <label for="edit-title">
+                        TITLE
+                    </label>
+
+                    <input type="text" id="edit-title" class="edit-book-title">
+
+                </div>
+
+                <div class="edit-field">
+
+                    <label for="edit-author">
+                        AUTHOR
+                    </label>
+
+                    <input type="text" id="edit-author" class="edit-author">
+
+                </div>
+
+                <div class="edit-field">
+
+                    <label for="edit-stock">
+                        STOCK
+                    </label>
+
+                    <input type="number" id="edit-stock" class="edit-stock" min="0">
+
+                </div>
+
+                <div class="edit-actions">
+
+                    <button type="button" class="edit-save">
+                        [SAVE]
+                    </button>
+
+                    <button type="button" class="edit-cancel">
+                        [CANCEL]
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </template>
+
     <script th:inline="javascript">
         const loanData = {};
     </script>
@@ -882,6 +1371,21 @@
     </script>
 
     <script>
+
+        function showSuccessMessage(message) {
+            const container = document.getElementById("success-message-container");
+            container.innerHTML = `
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <div class="success-text">${message}</div>
+                </div>
+            `;
+        }
+
+        if (sessionStorage.getItem("editBookSuccess")) {
+            showSuccessMessage(sessionStorage.getItem("editBookSuccess"));
+            sessionStorage.removeItem("editBookSuccess");
+        }
 
         /* ========================================================= */
         /* DATE AND TIME                                             */
@@ -926,11 +1430,6 @@
 
         setInterval(updateDateTime, 1000);
 
-
-        /* ========================================================= */
-        /* MOCK LOAN DATA                                           */
-        /* ========================================================= */
-
         /* ========================================================= */
         /* MULTIPLE DRAGGABLE LOAN WINDOWS                           */
         /* ========================================================= */
@@ -938,7 +1437,7 @@
         let nextWindowOffset = 0;
 
         /* ========================================================= */
-        /* OPEN A NEW LOAN WINDOW                                   */
+        /* OPEN A NEW LOAN WINDOW                                    */
         /* ========================================================= */
 
         async function openLoanWindow(isbn) {
@@ -1025,6 +1524,121 @@
 
         }
 
+
+        /* ========================================================= */
+        /* OPEN DELETE WINDOW                                        */
+        /* ========================================================= */
+
+        function openDeleteWindow(isbn, title) {
+
+            const template =
+                document.getElementById("delete-window-template");
+
+            const windowElement =
+                template.content.firstElementChild.cloneNode(true);
+
+            document.body.appendChild(windowElement);
+
+            windowElement.querySelector(".delete-book-title")
+                .textContent = title;
+
+            const closeWindow = () => {
+                windowElement.remove();
+            };
+
+            windowElement.querySelector(".delete-close")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".delete-cancel")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".delete-confirm")
+                .addEventListener("click", function () {
+
+                    // TODO: implement actual deletion
+                    console.log("Delete book:", isbn);
+
+                    closeWindow();
+                });
+        }
+
+        /* ========================================================= */
+        /* OPEN EDIT WINDOW                                          */
+        /* ========================================================= */
+
+        function openEditWindow(isbn, title, author, stock) {
+            const csrfToken =
+                document.querySelector('meta[name="_csrf"]').content;
+
+            const csrfHeader =
+                document.querySelector('meta[name="_csrf_header"]').content;
+
+            const template =
+                document.getElementById("edit-window-template");
+
+            const windowElement =
+                template.content.firstElementChild.cloneNode(true);
+
+            document.body.appendChild(windowElement);
+
+            /* Fill fields with current values */
+            windowElement.querySelector(".edit-isbn").value = isbn;
+            windowElement.querySelector(".edit-book-title").value = title;
+            windowElement.querySelector(".edit-author").value = author;
+            windowElement.querySelector(".edit-stock").value = stock;
+
+            const closeWindow = () => {
+                windowElement.remove();
+            };
+
+            windowElement.querySelector(".edit-close")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".edit-cancel")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".edit-save")
+                .addEventListener("click", async function () {
+
+                    const newTitle =
+                        windowElement.querySelector(".edit-book-title").value;
+                    const newAuthor =
+                        windowElement.querySelector(".edit-author").value;
+                    const newStock =
+                        parseInt(windowElement.querySelector(".edit-stock").value, 10);
+
+                    try {
+                        const response = await fetch(
+                            `/owner/edit-book/${encodeURIComponent(isbn)}`,
+                            {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    [csrfHeader]: csrfToken
+                                },
+                                body: JSON.stringify({
+                                    isbn: isbn,
+                                    title: newTitle,
+                                    author: newAuthor,
+                                    stock: newStock,
+                                })
+                            }
+                        );
+                        if (!response.ok) {
+                            throw new Error(
+                                `Failed to update book: ${isbn} HTTP ${response.status}`
+                            );
+                        }
+                        sessionStorage.setItem("editBookSuccess", `Successfully edited '${isbn}'`);
+                        windowElement.remove();
+                        location.reload();
+                    } catch (error) {
+                        console.error("Error updating book: ", error);
+                    }
+
+                });
+        }
+
         /* ========================================================= */
         /* BRING WINDOW TO FRONT                                     */
         /* ========================================================= */
@@ -1041,7 +1655,7 @@
         }
 
         /* ========================================================= */
-        /* MAKE WINDOW DRAGGABLE                                    */
+        /* MAKE WINDOW DRAGGABLE                                     */
         /* ========================================================= */
 
         function makeDraggable(windowElement, titleBar) {

@@ -21,33 +21,30 @@ public class BookService {
         this.authorRepo = authorRepo;
     }
 
-    // public Book addBook(Book book) {
-    public Book addBook(AddBookRequest bookRequest) {
-
-        // Check if the author of book being added already exists
+    /*
+     * Fetch an author by name, if author isn't present in the db
+     * a new entry for it will be created
+     */
+    public Author fetchAuthor(String authorName) {
         Author author = authorRepo
-                .findByNameIgnoreCase(bookRequest.getAuthorName().trim())
+                .findByNameIgnoreCase(authorName.trim())
                 .orElseGet(() -> {
 
-                    // Save new author
                     Author newAuthor = new Author();
-                    newAuthor.setName(bookRequest.getAuthorName().trim());
+                    newAuthor.setName(authorName.trim());
 
                     return authorRepo.save(newAuthor);
                 });
-
-        Book book = new Book();
-
-        book.setIsbn(bookRequest.getIsbn());
-        book.setTitle(bookRequest.getTitle());
-        book.setStock(bookRequest.getStock());
-        book.setAuthor(author);
-
-        return bookRepo.save(book);
+        return author;
     }
 
-    public Book updateBook(Book book) {
-        return bookRepo.save(book);
+    // Add/Update book
+    public Book addBook(AddBookRequest bookRequest) {
+        return bookRepo.save(new Book(
+                bookRequest.getIsbn(),
+                bookRequest.getTitle(),
+                fetchAuthor(bookRequest.getAuthorName()),
+                bookRequest.getStock()));
     }
 
     public void deleteBook(String isbn) {
