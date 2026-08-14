@@ -69,6 +69,11 @@ public class BookLoanService {
                 throw new IllegalStateException("Book with ISBN \'" + isbn + "\' is out of stock.");
             }
 
+            // Check if book was decommissioned
+            if (book.isDecommissioned()) {
+                throw new IllegalStateException("Book with ISBN \'" + isbn + "\' has been decommissioned.");
+            }
+
             // Decrease book stock
             book.addStock(-1);
             bookRepo.save(book);
@@ -99,11 +104,11 @@ public class BookLoanService {
                 .orElseThrow(() -> new RuntimeException("Active loan not found"));
 
         book.addStock(1);
+        bookRepo.save(book);
 
-        // Write to DB
+        // Write transaction to DB
         bookLoanRepo.returnBook(transactionId, isbn, LocalDate.now(),
                 bookLoan.calculateFine(appProperties.getLateReturnFee()));
-        bookRepo.save(book);
 
     }
 

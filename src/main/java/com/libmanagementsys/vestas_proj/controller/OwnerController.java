@@ -93,4 +93,12 @@ public class OwnerController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/decomm-book/{isbn}")
+    public ResponseEntity<?> decommBook(
+            @PathVariable String isbn) {
+        bookService.decommBook(isbn);
+
+        return ResponseEntity.ok().build();
+    }
+
 }

@@ -292,7 +292,7 @@
             font-weight: bold;
         }
 
-        .delete-button {
+        .decommission-button {
             border: 0;
             background: transparent;
 
@@ -308,7 +308,28 @@
             padding: 2px 5px;
         }
 
-        .delete-button:hover {
+        .decommission-button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .decommission-button {
+            border: 0;
+            background: transparent;
+
+            color: inherit;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            font-weight: bold;
+
+            text-decoration: underline;
+
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+
+        .decommission-button:hover {
             background: #000;
             color: #fff;
         }
@@ -684,7 +705,7 @@
             line-height: 1.4;
         }
 
-        .delete-window {
+        .decommission-window {
             position: fixed;
 
             width: 450px;
@@ -705,7 +726,7 @@
             transform: translate(-50%, -50%);
         }
 
-        .delete-title-bar {
+        .decommission-title-bar {
             height: 34px;
 
             display: flex;
@@ -720,7 +741,7 @@
             user-select: none;
         }
 
-        .delete-close {
+        .decommission-close {
             width: 18px;
             height: 18px;
 
@@ -746,12 +767,12 @@
             cursor: pointer;
         }
 
-        .delete-close:hover {
+        .decommission-close:hover {
             background: #000;
             color: #fff;
         }
 
-        .delete-title {
+        .decommission-title {
             position: absolute;
 
             left: 50%;
@@ -769,11 +790,11 @@
             white-space: nowrap;
         }
 
-        .delete-content {
+        .decommission-content {
             padding: 25px;
         }
 
-        .delete-message {
+        .decommission-message {
             margin-bottom: 25px;
 
             text-align: center;
@@ -783,14 +804,14 @@
             line-height: 1.5;
         }
 
-        .delete-book-title {
+        .decommission-book-title {
             background: #000;
             color: #fff;
 
             padding: 2px 5px;
         }
 
-        .delete-actions {
+        .decommission-actions {
             display: flex;
 
             justify-content: center;
@@ -798,7 +819,7 @@
             gap: 15px;
         }
 
-        .delete-actions button {
+        .decommission-actions button {
             min-width: 90px;
 
             padding: 7px 12px;
@@ -816,12 +837,12 @@
             box-shadow: 3px 3px 0 #000;
         }
 
-        .delete-actions button:hover {
+        .decommission-actions button:hover {
             background: #000;
             color: #fff;
         }
 
-        .delete-actions button:active {
+        .decommission-actions button:active {
             transform: translate(2px, 2px);
             box-shadow: 1px 1px 0 #000;
         }
@@ -1016,6 +1037,11 @@
 
             box-shadow: 1px 1px 0 #000;
         }
+
+        .decomm-tag {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 
 </head>
@@ -1133,6 +1159,9 @@
                         <tr th:each="book : ${books}"
                             th:with="loanCount=${bookLoanService.getOnLoanCountByIsbn(book.isbn)}">
                             <td>
+                                <button type="button" class="decommission-button">
+                                    [X]
+                                </button>
                                 <button type="button" class="edit-button" th:attr="
                                         data-isbn=${book.isbn},
                                         data-title=${book.title},
@@ -1145,16 +1174,22 @@
                                     )">
                                     [EDIT]
                                 </button>
-                                <button type="button" class="delete-button"
-                                    th:attr="data-isbn=${book.isbn},data-title=${book.title}"
-                                    onclick="openDeleteWindow(this.dataset.isbn, this.dataset.title)">
-                                    [DELETE]
+                                <button type="button" class="decommission-button" th:attr="data-isbn=${book.isbn},
+                                    data-title=${book.title},
+                                    data-decommissioned=${book.decommissioned}"
+                                    th:text="${book.decommissioned} ? [A] : [D]"
+                                    onclick="openDecommWindow(this.dataset.isbn, this.dataset.title, this.dataset.decommissioned)">
                                 </button>
                             </td>
-                            <td th:text="${book.isbn}">ISBN</td>
-                            <td th:text="${book.title}">Title</td>
-                            <td th:text="${book.author.name}">Author</td>
-                            <td style="text-align: center;" th:text="${book.stock}">Stock</td>
+                            <td th:text="${book.isbn}"></td>
+                            <td>
+                                <span th:text="${book.title}"></span>
+                                <span th:if="${book.decommissioned}" class="decomm-tag">
+                                    [DECOMMISSIONED]
+                                </span>
+                            </td>
+                            <td th:text="${book.author.name}"></td>
+                            <td style="text-align: center;" th:text="${book.stock}"></td>
                             <td style="text-align: center;">
                                 <button type="button" class="loan-count" th:text="${loanCount}"
                                     th:attr="data-isbn=${book.isbn}" th:disabled="${loanCount == 0}"
@@ -1242,36 +1277,36 @@
 
     </template>
 
-    <template id="delete-window-template">
+    <template id="decommission-window-template">
 
-        <div class="delete-window">
+        <div class="decommission-window">
 
-            <div class="delete-title-bar">
+            <div class="decommission-title-bar">
 
-                <button type="button" class="delete-close">
+                <button type="button" class="decommission-close">
                     ×
                 </button>
 
-                <div class="delete-title">
-                    DELETE BOOK
+                <div class="decommission-title">
+                    DECOMMISSION BOOK
                 </div>
 
             </div>
 
-            <div class="delete-content">
+            <div class="decommission-content">
 
-                <div class="delete-message">
-                    Are you sure you want to delete
-                    <span class="delete-book-title"></span>?
+                <div class="decommission-message">
+                    <span class="decommission-question"></span>
+                    <span class="decommission-book-title"></span> ?
                 </div>
 
-                <div class="delete-actions">
+                <div class="decommission-actions">
 
-                    <button type="button" class="delete-confirm">
+                    <button type="button" class="decommission-confirm">
                         [YES]
                     </button>
 
-                    <button type="button" class="delete-cancel">
+                    <button type="button" class="decommission-cancel">
                         [NO]
                     </button>
 
@@ -1524,41 +1559,70 @@
 
         }
 
-
         /* ========================================================= */
-        /* OPEN DELETE WINDOW                                        */
+        /* OPEN DECOMMISSION WINDOW                                  */
         /* ========================================================= */
 
-        function openDeleteWindow(isbn, title) {
+        function openDecommWindow(isbn, title, decommissioned) {
+            decommissioned = decommissioned === "true";
+            const csrfToken =
+                document.querySelector('meta[name="_csrf"]').content;
+
+            const csrfHeader =
+                document.querySelector('meta[name="_csrf_header"]').content;
 
             const template =
-                document.getElementById("delete-window-template");
+                document.getElementById("decommission-window-template");
 
             const windowElement =
                 template.content.firstElementChild.cloneNode(true);
 
             document.body.appendChild(windowElement);
 
-            windowElement.querySelector(".delete-book-title")
+            windowElement.querySelector(".decommission-book-title")
                 .textContent = title;
+
+            console.log(decommissioned);
+            decommissioned ? windowElement.querySelector(".decommission-question")
+                .textContent = "Are you sure you want to activate"
+                : windowElement.querySelector(".decommission-question")
+                    .textContent = "Are you sure you want to decommission";
 
             const closeWindow = () => {
                 windowElement.remove();
             };
 
-            windowElement.querySelector(".delete-close")
+            windowElement.querySelector(".decommission-close")
                 .addEventListener("click", closeWindow);
 
-            windowElement.querySelector(".delete-cancel")
+            windowElement.querySelector(".decommission-cancel")
                 .addEventListener("click", closeWindow);
 
-            windowElement.querySelector(".delete-confirm")
-                .addEventListener("click", function () {
+            windowElement.querySelector(".decommission-confirm")
+                .addEventListener("click", async function () {
 
-                    // TODO: implement actual deletion
-                    console.log("Delete book:", isbn);
+                    try {
+                        const response = await fetch(
+                            `/owner/decomm-book/${encodeURIComponent(isbn)}`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    [csrfHeader]: csrfToken
+                                }
+                            }
+                        );
 
-                    closeWindow();
+                        if (!response.ok) {
+                            throw new Error(
+                                `Failed to decommission book: ${isbn} HTTP ${response.status}`
+                            );
+                        }
+
+                        closeWindow();
+                        location.reload();
+                    } catch (error) {
+                        console.log("Error deleting book:", error);
+                    }
                 });
         }
 

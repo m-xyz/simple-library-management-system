@@ -47,12 +47,24 @@ public class BookService {
                 bookRequest.getStock()));
     }
 
-    public void deleteBook(String isbn) {
-        bookRepo.deleteById(isbn);
+    public void decommBook(String isbn) {
+        Book book = bookRepo
+                .findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+        book.setDecommissioned(!book.isDecommissioned());
+        bookRepo.save(book);
     }
 
     public List<Book> getAllBooks() {
         return bookRepo.findAll();
+    }
+
+    public List<Book> getAllDecommissionedBooks() {
+        return bookRepo.findByDecommissionedTrue();
+    }
+
+    public List<Book> getAllNonDecommissionedBooks() {
+        return bookRepo.findByDecommissionedFalse();
     }
 
     public Optional<Book> findByIsbn(String isbn) {

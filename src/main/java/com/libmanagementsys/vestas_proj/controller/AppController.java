@@ -67,7 +67,7 @@ public class AppController {
     @GetMapping("/client")
     public String clientHome(Model model, Authentication auth) {
         model.addAttribute("username", auth.getName());
-        model.addAttribute("books", bookService.getAllBooks());
+        model.addAttribute("books", bookService.getAllNonDecommissionedBooks());
 
         return "client";
     }

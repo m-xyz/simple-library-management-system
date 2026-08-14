@@ -16,6 +16,9 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
+    @Column(nullable = false)
+    private boolean decommissioned = false;
+
     public Book(String isbn, String title, Author author, int stock) {
         this.isbn = isbn;
         this.title = title;
@@ -64,6 +67,14 @@ public class Book {
 
     public void addStock(int quantity) {
         this.stock += quantity;
+    }
+
+    public boolean isDecommissioned() {
+        return this.decommissioned;
+    }
+
+    public void setDecommissioned(boolean decommissioned) {
+        this.decommissioned = decommissioned;
     }
 
 }
