@@ -1,5 +1,6 @@
 package com.libmanagementsys.vestas_proj.controller;
 
+import com.libmanagementsys.vestas_proj.model.AppProperties;
 import com.libmanagementsys.vestas_proj.repository.UserRepository;
 import com.libmanagementsys.vestas_proj.service.BookLoanService;
 import com.libmanagementsys.vestas_proj.service.BookService;
@@ -19,26 +20,30 @@ import com.libmanagementsys.vestas_proj.model.User;
 @Controller
 public class AppController {
 
+    private final AppProperties appProperties;
     private final BookService bookService;
     private final UserRepository userRepository;
     private final UserService userService;
     private final BookLoanService bookLoanService;
 
     AppController(UserService userService, UserRepository userRepository, BookService bookService,
-            BookLoanService bookLoanService) {
+            BookLoanService bookLoanService, AppProperties appProperties) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.bookService = bookService;
         this.bookLoanService = bookLoanService;
+        this.appProperties = appProperties;
     }
 
     @GetMapping("/")
     public String home() {
+
         return "index";
     }
 
     @GetMapping("/login")
     public String login() {
+
         return "login";
     }
 
@@ -60,6 +65,7 @@ public class AppController {
         model.addAttribute("username", auth.getName());
         model.addAttribute("books", bookService.getAllBooks());
         model.addAttribute("bookLoanService", bookLoanService);
+        model.addAttribute("loanLateFee", appProperties.getLateReturnFee());
 
         return "owner";
     }
@@ -75,6 +81,7 @@ public class AppController {
     @GetMapping("/signup")
     public String signup(Model model) {
         model.addAttribute("user", new User());
+
         return "signup";
     }
 
@@ -109,6 +116,7 @@ public class AppController {
 
         if (result.hasErrors()) {
             System.out.println(result);
+
             return "signup";
         }
 

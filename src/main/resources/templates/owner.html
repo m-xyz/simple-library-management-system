@@ -1191,9 +1191,10 @@
                             <td th:text="${book.author.name}"></td>
                             <td style="text-align: center;" th:text="${book.stock}"></td>
                             <td style="text-align: center;">
-                                <button type="button" class="loan-count" th:text="${loanCount}"
-                                    th:attr="data-isbn=${book.isbn}" th:disabled="${loanCount == 0}"
-                                    th:onclick="${loanCount > 0} ? 'openLoanWindow(this.dataset.isbn)' : null">
+                                <button type="button" class="loan-count" th:text="${loanCount}" th:attr="
+                                    data-isbn=${book.isbn},
+                                    data-fee=${loanLateFee}" th:disabled="${loanCount == 0}"
+                                    th:onclick="${loanCount > 0} ? 'openLoanWindow(this.dataset.isbn, this.dataset.fee)' : null">
                                 </button>
                             </td>
                         </tr>
@@ -1475,7 +1476,7 @@
         /* OPEN A NEW LOAN WINDOW                                    */
         /* ========================================================= */
 
-        async function openLoanWindow(isbn) {
+        async function openLoanWindow(isbn, loanLateFee) {
 
             const response = await fetch(`/owner/loans/${encodeURIComponent(isbn)}`);
 
@@ -1511,14 +1512,13 @@
             book.users.forEach(user => {
 
                 const row = document.createElement("tr");
-
+                let daysLate = user.fine / loanLateFee;
                 row.innerHTML = `
                     <td>${user.username}</td>
                     <td>${user.requestDate}</td>
                     <td>${user.dueDate}</td>
-                    <td>${user.fine} €</td>
+                    <td>${user.fine} € (${daysLate} ${daysLate == 0 ? 'days' : (daysLate > 1 ? 'days' : 'day')} late)</td>
                 `;
-
                 tableBody.appendChild(row);
 
             });
@@ -1582,7 +1582,6 @@
             windowElement.querySelector(".decommission-book-title")
                 .textContent = title;
 
-            console.log(decommissioned);
             decommissioned ? windowElement.querySelector(".decommission-question")
                 .textContent = "Are you sure you want to activate"
                 : windowElement.querySelector(".decommission-question")

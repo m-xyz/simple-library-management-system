@@ -594,8 +594,10 @@
 
                                 <td>
                                     <span th:if="${#temporals.createToday().isAfter(loan.transaction.dueDate)}"
-                                        class="overdue">
-                                        OVERDUE
+                                        class="overdue"
+                                        th:text="${'[!] OVERDUE (' +
+          T(java.time.temporal.ChronoUnit).DAYS.between(loan.transaction.dueDate, #temporals.createToday()) +
+          (T(java.time.temporal.ChronoUnit).DAYS.between(loan.transaction.dueDate, #temporals.createToday()) == 1 ? ' day late)' : ' days late)')}">
                                     </span>
 
                                     <span th:unless="${#temporals.createToday().isAfter(loan.transaction.dueDate)}">
