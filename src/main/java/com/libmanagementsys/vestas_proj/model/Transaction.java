@@ -22,6 +22,15 @@ public class Transaction {
     @Column(nullable = false)
     private LocalDate dueDate;
 
+    protected Transaction() {
+    }
+
+    public Transaction(User user, LocalDate requesDate, LocalDate dueDate) {
+        this.user = user;
+        this.requestDate = requesDate;
+        this.dueDate = dueDate;
+    }
+
     public Long getTransactionId() {
         return this.transactionId;
     }

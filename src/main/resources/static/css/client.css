@@ -1,0 +1,423 @@
+.window {
+    width: 94%;
+    max-width: 1200px;
+
+    margin: 35px auto;
+
+    background: #ffffff;
+
+    border: 3px solid #000;
+
+    box-shadow:
+        6px 6px 0 #000;
+}
+
+.stock {
+    text-align: center;
+    font-weight: bold;
+}
+
+.borrow-button {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border: 2px solid #000;
+
+    color: #000;
+
+    background: #fff;
+
+    text-decoration: none;
+
+    font-family: "Courier New", monospace;
+
+    font-weight: bold;
+}
+
+.borrow-button:hover {
+    background: #fff;
+
+    color: #000;
+
+    border: 2px solid #000;
+}
+
+.borrow-disabled {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border: 2px solid #777;
+
+    color: #777;
+
+    background: #fff;
+
+    font-family: "Courier New", monospace;
+
+    font-weight: bold;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .content {
+        padding: 15px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .mac-button {
+        width: 100%;
+    }
+
+    .window {
+        width: 96%;
+
+        margin: 15px auto;
+    }
+
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 18px;
+    height: 18px;
+
+    border: 2px solid #000;
+    background: #fff;
+
+    cursor: pointer;
+
+    vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+    background: #000;
+    position: relative;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "✓";
+
+    color: #fff;
+
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    font-weight: bold;
+
+    position: absolute;
+
+    left: 2px;
+    top: -2px;
+}
+
+input[type="checkbox"]:disabled {
+    background: #fff;
+
+    border: 2px dashed #000;
+
+    cursor: not-allowed;
+}
+
+.out-of-stock {
+    font-weight: bold;
+    font-size: 11px;
+    text-decoration: line-through;
+}
+
+.borrow-button:hover {
+    background: #fff;
+    color: #000;
+}
+
+.borrow-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 3px double #000;
+}
+
+.borrow-button {
+    min-width: 190px;
+    background: #000;
+    color: #fff;
+    border: 2px solid #000;
+    cursor: pointer;
+}
+
+.borrow-button:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Disabled when nothing is selected */
+.borrow-button:disabled {
+    background: #ccc;
+    color: #666;
+    border-color: #888;
+    cursor: not-allowed;
+    box-shadow: 3px 3px 0 #888;
+}
+
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #000;
+    box-shadow: 4px 4px 0 #000;
+    font-weight: bold;
+}
+
+.error-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: #ff0000;
+    border: 1px solid #000;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50%;
+}
+
+.error-text {
+    line-height: 1.4;
+}
+
+.duplicate-book td {
+    background: #fff0f0 !important;
+    color: #900;
+}
+
+.duplicate-book td:first-child {
+    border-left: 5px solid #c00;
+}
+
+.duplicate-book .isbn {
+    color: #c00;
+}
+
+.duplicate-book .book-checkbox {
+    border: 3px solid #c00;
+}
+
+.duplicate-book:hover td {
+    background: #000 !important;
+    color: #fff;
+}
+
+.duplicate-book:hover .isbn {
+    color: #fff;
+}
+
+.duplicate-book:hover .book-checkbox {
+    border-color: #fff;
+}
+
+.waitlist-button {
+    display: inline-block;
+
+    min-width: 90px;
+
+    padding: 6px 10px;
+
+    color: #000;
+    background: #fff;
+
+    border: 1px solid #000;
+
+    text-decoration: none;
+
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+
+    text-align: center;
+
+    box-shadow: 3px 3px 0 #000;
+
+    cursor: pointer;
+}
+
+.waitlist-button:hover {
+    background: #000;
+    color: #fff;
+}
+
+.waitlist-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #000;
+}
+
+.waitlist-window {
+    position: fixed;
+
+    width: 450px;
+    max-width: 90vw;
+
+    background: #fff;
+    color: #000;
+
+    border: 3px solid #000;
+
+    box-shadow: 7px 7px 0 #000;
+
+    z-index: 2000;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+.waitlist-title-bar {
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    border-bottom: 3px solid #000;
+
+    background: #fff;
+
+    user-select: none;
+}
+
+.waitlist-close {
+    width: 18px;
+    height: 18px;
+
+    margin-left: 7px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #000;
+
+    background: #fff;
+    color: #000;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+
+    line-height: 12px;
+
+    cursor: pointer;
+}
+
+.waitlist-close:hover {
+    background: #000;
+    color: #fff;
+}
+
+.waitlist-title {
+    position: absolute;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 0 12px;
+
+    background: #fff;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+}
+
+.waitlist-content {
+    padding: 25px;
+}
+
+.waitlist-message {
+    margin-bottom: 25px;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    line-height: 1.5;
+}
+
+.waitlist-book-title {
+    background: #000;
+    color: #fff;
+
+    padding: 2px 5px;
+}
+
+.waitlist-count {
+    margin-top: 15px;
+
+    padding-top: 10px;
+
+    border-top: 1px solid #000;
+
+    font-size: 13px;
+}
+
+.waitlist-user-count {
+    background: #000;
+    color: #fff;
+
+    padding: 2px 5px;
+}
+
+.waitlist-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+}
+
+.waitlist-actions button {
+    min-width: 90px;
+
+    padding: 7px 12px;
+
+    border: 2px solid #000;
+
+    background: #fff;
+    color: #000;
+
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 3px 3px 0 #000;
+}
+
+.waitlist-actions button:hover {
+    background: #000;
+    color: #fff;
+}
+
+.waitlist-actions button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 #000;
+}

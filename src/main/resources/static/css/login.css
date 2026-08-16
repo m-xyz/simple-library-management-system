@@ -1,0 +1,302 @@
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            justify-content: center;
+
+            background: #ffffff;
+            color: #000000;
+
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+
+            background-image:
+                radial-gradient(#000 0.6px, transparent 0.6px);
+            background-size: 4px 4px;
+        }
+
+        .window {
+            width: 420px;
+
+            background: #fff;
+
+            border: 3px solid #000;
+
+            box-shadow:
+                6px 6px 0 #000;
+        }
+
+        .title-bar {
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+
+            position: relative;
+
+            border-bottom: 3px solid #000;
+
+            padding: 0 8px;
+        }
+
+        .back-button {
+            color: #000;
+
+            text-decoration: none;
+
+            font-family: "Courier New", monospace;
+            font-size: 12px;
+            font-weight: bold;
+
+            padding: 4px 6px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+        }
+
+        .back-button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        .back-button:active {
+            transform: translate(1px, 1px);
+        }
+
+        .title {
+            position: absolute;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: #fff;
+
+            padding: 0 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 25px;
+        }
+
+        .header {
+            text-align: center;
+
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px 0;
+
+            font-size: 22px;
+
+            text-transform: none;
+        }
+
+        .header p {
+            margin: 0;
+
+            font-size: 13px;
+        }
+
+        .message {
+            border: 2px solid #000;
+
+            padding: 10px;
+
+            margin-bottom: 20px;
+
+            font-weight: bold;
+
+            background:
+                repeating-linear-gradient(45deg,
+                    #fff,
+                    #fff 2px,
+                    #000 2px,
+                    #000 3px);
+
+            background-size: 5px 5px;
+        }
+
+        .message span {
+            background: #fff;
+
+            padding: 2px 5px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 9px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+
+            color: #000;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        input:focus {
+            background: #000;
+
+            color: #fff;
+        }
+
+        .login-button {
+            width: 100%;
+
+            padding: 10px;
+
+            margin-top: 5px;
+
+            border: 2px solid #000;
+
+            background: #fff;
+
+            color: #000;
+
+            font-family: "Courier New", monospace;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                3px 3px 0 #000;
+        }
+
+        .login-button:hover {
+            background: #000;
+
+            color: #fff;
+        }
+
+        .login-button:active {
+            transform: translate(2px, 2px);
+
+            box-shadow:
+                1px 1px 0 #000;
+        }
+
+        .signup {
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding-top: 15px;
+
+            border-top: 3px double #000;
+        }
+
+        .signup a {
+            color: #000;
+
+            font-weight: bold;
+
+            text-decoration: underline;
+        }
+
+        .signup a:hover {
+            background: #000;
+
+            color: #fff;
+
+            text-decoration: none;
+        }
+
+        .status-bar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-top: 20px;
+
+            padding-top: 8px;
+
+            border-top: 1px solid #000;
+
+            font-size: 11px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+
+            width: 9px;
+            height: 9px;
+
+            border: 2px solid #000;
+
+            margin-right: 4px;
+
+            vertical-align: middle;
+        }
+
+        .error-message {
+            border-color: #ff0000;
+            color: #ff0000;
+            text-align: center;
+
+            background:
+                repeating-linear-gradient(45deg,
+                    #fff,
+                    #fff 2px,
+                    #ff0000 2px,
+                    #ff0000 3px);
+        }
+
+        .error-message span {
+            color: #ff0000;
+            background: #fff;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .window {
+                width: 100%;
+            }
+
+        }

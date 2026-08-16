@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import com.libmanagementsys.vestas_proj.model.AppProperties;
+import com.libmanagementsys.vestas_proj.config.AppProperties;
+import com.libmanagementsys.vestas_proj.dto.LoanHistoryEntryDto;
+import com.libmanagementsys.vestas_proj.dto.ReturnBookResultDto;
+import com.libmanagementsys.vestas_proj.event.BookReturnedEvent;
 import com.libmanagementsys.vestas_proj.model.Book;
 import com.libmanagementsys.vestas_proj.model.BookLoan;
 import com.libmanagementsys.vestas_proj.model.BookLoanId;
-import com.libmanagementsys.vestas_proj.model.LoanHistoryEntry;
 import com.libmanagementsys.vestas_proj.model.Transaction;
 import com.libmanagementsys.vestas_proj.model.User;
 import com.libmanagementsys.vestas_proj.repository.BookLoanRepository;
@@ -25,90 +29,143 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class BookLoanService {
+    private final BookService bookService;
     private final BookRepository bookRepo;
     private final TransactionRepository transactionRepo;
     private final BookLoanRepository bookLoanRepo;
     private final AppProperties appProperties;
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserService userService;
 
     public BookLoanService(
             BookRepository bookRepo,
             TransactionRepository transactionRepo,
             BookLoanRepository bookLoanRepo,
-            AppProperties appProperties) {
+            AppProperties appProperties,
+            ApplicationEventPublisher eventPublisher,
+            BookService bookService,
+            UserService userService) {
         this.bookRepo = bookRepo;
         this.transactionRepo = transactionRepo;
         this.bookLoanRepo = bookLoanRepo;
         this.appProperties = appProperties;
+        this.eventPublisher = eventPublisher;
+        this.bookService = bookService;
+        this.userService = userService;
     }
 
-    // TODO: Create function for each step
-    @Transactional // Rollback if at any point an exception is thrown
-    public void loanBooks(User user, Set<String> isbns) {
+    public Transaction createTransaction(User user) {
+        return transactionRepo.save(new Transaction(
+                user,
+                LocalDate.now(),
+                LocalDate.now().plusDays(appProperties.getBookBorrowDays())));
+    }
 
-        // validateRequest()
+    public void validateBookLoanRequest(Set<String> isbns) {
         if (isbns == null || isbns.isEmpty()) {
             throw new IllegalArgumentException("No books selected.");
         }
+    }
 
-        // createTransaction()
-        Transaction transaction = new Transaction();
-        transaction.setUser(user);
-        transaction.setRequestDate(LocalDate.now());
-        transaction.setDueDate(LocalDate.now().plusDays(appProperties.getBookBorrowDays()));
-        transaction = transactionRepo.save(transaction);
+    public void createBookLoan(Book book, Transaction transaction) {
+        BookLoan bookLoan = new BookLoan();
+        BookLoanId bookLoanId = new BookLoanId();
 
-        // createBookLoans()
+        bookLoanId.setTransactionId(transaction.getTransactionId()); // (1) Composite PK
+        bookLoanId.setIsbn(book.getIsbn()); // (2) Composite PK
+
+        bookLoan.setId(bookLoanId); // Set composite PK
+        bookLoan.setTransaction(transaction);
+        bookLoan.setBook(book);
+        bookLoan.setReturnDate(null); // NULL returnDate means book is still on loan
+        bookLoan.setFine(BigDecimal.ZERO);
+        bookLoanRepo.save(bookLoan);
+    }
+
+    Book validateGetBook(String isbn) {
+        // Sanity check for book's existance
+        Book book = bookRepo.findById(isbn)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Book with ISBN \'" + isbn + "\' not found."));
+
+        if (book.isDecommissioned()) {
+            throw new IllegalStateException("Book with ISBN \'" + isbn + "\' has been decommissioned.");
+        }
+
+        return book;
+
+    }
+
+    @Transactional // Rollback if at any point an exception is thrown
+    public void loanBooks(User user, Set<String> isbns, boolean handOver) {
+
+        validateBookLoanRequest(isbns);
+
+        Transaction transaction = createTransaction(user);
+
         for (String isbn : isbns) {
-            // Sanity check for book's existance
-            Book book = bookRepo.findById(isbn)
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "Book with ISBN \'" + isbn + "\' not found."));
 
-            // Check if book is still available
-            if (book.getStock() <= 0) {
-                throw new IllegalStateException("Book with ISBN \'" + isbn + "\' is out of stock.");
+            Book book = validateGetBook(isbn);
+
+            // Update stock accordingly
+            if (!handOver) {
+                bookService.updateStock(book, -1);
+                // Check if book is still available
+                // if (book.getStock() <= 0) {
+                // throw new IllegalStateException("Book with ISBN \'" + isbn + "\' is out of
+                // stock.");
+                // }
             }
 
-            // Check if book was decommissioned
-            if (book.isDecommissioned()) {
-                throw new IllegalStateException("Book with ISBN \'" + isbn + "\' has been decommissioned.");
-            }
-
-            // Decrease book stock
-            book.addStock(-1);
-            bookRepo.save(book);
-
-            // createBookLoan()
-            BookLoan bookLoan = new BookLoan();
-            BookLoanId bookLoanId = new BookLoanId();
-            bookLoanId.setTransactionId(transaction.getTransactionId()); // (1) Composite PK
-            bookLoanId.setIsbn(book.getIsbn()); // (2) Composite PK
-            bookLoan.setId(bookLoanId); // Set composite PK
-            bookLoan.setTransaction(transaction);
-            bookLoan.setBook(book);
-            bookLoan.setReturnDate(null); // NULL returnDate means book is still on loan
-            bookLoan.setFine(BigDecimal.ZERO);
-            bookLoanRepo.save(bookLoan);
+            createBookLoan(book, transaction);
 
         }
 
     }
 
     @Transactional
-    public void returnBook(Long transactionId, String isbn) {
+    public ReturnBookResultDto returnBook(Long transactionId, String isbn) {
         Book book = bookRepo
                 .findByIsbn(isbn)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new RuntimeException("No book found with ISBN: \'" + isbn + "\'"));
         BookLoan bookLoan = bookLoanRepo
                 .findActiveLoan(transactionId, isbn)
-                .orElseThrow(() -> new RuntimeException("Active loan not found"));
+                .orElseThrow(() -> new RuntimeException(
+                        "No active loan found for: \'" + book.getTitle() + "\' (" + book.getIsbn() + ")"));
 
-        book.addStock(1);
-        bookRepo.save(book);
+        BigDecimal fine = bookLoan.calculateFine(appProperties.getLateReturnFee());
 
         // Write transaction to DB
-        bookLoanRepo.returnBook(transactionId, isbn, LocalDate.now(),
-                bookLoan.calculateFine(appProperties.getLateReturnFee()));
+        bookLoanRepo.returnBook(
+                transactionId,
+                isbn,
+                LocalDate.now(),
+                fine);
+
+        // Anti-snatch
+        /*
+         * User A returns ISBN 123
+         * |
+         * ↓
+         * stock becomes 1
+         * |
+         * | User B
+         * | |
+         * | ↓
+         * | sees stock = 1
+         * | |
+         * | ↓
+         * | BORROW
+         * |
+         * ↓
+         * Waiting-list handler
+         * |
+         * ↓
+         * User C gets it
+         */
+        eventPublisher.publishEvent(new BookReturnedEvent(book));
+
+        return new ReturnBookResultDto(book.getTitle(), isbn, fine);
 
     }
 
@@ -116,9 +173,9 @@ public class BookLoanService {
         return bookLoanRepo.findActiveLoansByUserId(userId);
     }
 
-    public List<LoanHistoryEntry> getLoanHistory() {
+    public List<LoanHistoryEntryDto> getLoanHistory() {
         return bookLoanRepo.getLoanHistory().stream().map(
-                loan -> new LoanHistoryEntry(
+                loan -> new LoanHistoryEntryDto(
                         loan.getReturnDate() == null ? "ACTIVE" : "COMPLETED",
                         loan.getTransaction().getUser().getUsername(),
                         loan.getBook().getTitle(),
@@ -167,5 +224,18 @@ public class BookLoanService {
 
     public int getOnLoanCountByIsbn(String isbn) {
         return bookLoanRepo.getOnLoanByIsbn(isbn).size();
+    }
+
+    public boolean checkIfUserIsBorrowingBook(Long userId, String isbn) {
+        return bookLoanRepo.checkIfUserIsBorrowingBook(userId, isbn);
+    }
+
+    public List<String> checkForDupeLoans(User user, Set<String> isbns) {
+
+        return isbns.stream()
+                .filter(getActiveLoans(user.getId()).stream()
+                        .map(loan -> loan.getBook().getIsbn())
+                        .collect(Collectors.toSet())::contains)
+                .toList();
     }
 }

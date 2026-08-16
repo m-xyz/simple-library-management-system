@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.libmanagementsys.vestas_proj.model.AddBookRequest;
+import com.libmanagementsys.vestas_proj.dto.AddBookRequestDto;
 import com.libmanagementsys.vestas_proj.service.BookLoanService;
 import com.libmanagementsys.vestas_proj.service.BookService;
 
@@ -36,14 +36,14 @@ public class OwnerController {
 
     @GetMapping("/add-book")
     public String addBookPage(Model model) {
-        model.addAttribute("bookRequest", new AddBookRequest());
+        model.addAttribute("bookRequest", new AddBookRequestDto());
 
         return "add-book";
     }
 
     @PostMapping("/add-book")
     public String addBook(
-            @ModelAttribute("bookRequest") AddBookRequest bookRequest,
+            @ModelAttribute("bookRequest") AddBookRequestDto bookRequest,
             RedirectAttributes redirectAttributes,
             BindingResult result) {
 
@@ -84,7 +84,7 @@ public class OwnerController {
     public ResponseEntity<?> editBook(
             @PathVariable String isbn,
             @RequestBody Map<String, Object> data) {
-        bookService.addBook(new AddBookRequest(
+        bookService.addBook(new AddBookRequestDto(
                 isbn,
                 (String) data.get("title"),
                 (String) data.get("author"),

@@ -1,0 +1,215 @@
+body {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    color: #000000;
+
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+
+    /* 1-bit Macintosh desktop texture */
+    background-image:
+        radial-gradient(#000 0.6px, transparent 0.6px);
+
+    background-size: 4px 4px;
+
+    padding: 20px;
+}
+
+
+.window {
+    width: 520px;
+    max-width: 100%;
+
+    background: #fff;
+
+    border: 3px solid #000;
+
+    box-shadow:
+        7px 7px 0 #000;
+}
+
+.window-icon {
+    width: 16px;
+    height: 16px;
+
+    border: 2px solid #000;
+
+    margin-right: 10px;
+
+    background:
+        linear-gradient(to bottom,
+            #000 0px,
+            #000 2px,
+            #fff 2px,
+            #fff 4px);
+
+    background-size: 100% 4px;
+}
+
+.content {
+    padding: 35px 30px 25px;
+}
+
+.logo {
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+.book-icon {
+    display: inline-block;
+
+    border: 3px solid #000;
+
+    padding: 8px 14px;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    box-shadow:
+        4px 4px 0 #000;
+}
+
+.header {
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+.header h1 {
+    margin: 0;
+
+    font-size: 20px;
+
+    line-height: 1.5;
+
+    letter-spacing: 1px;
+}
+
+.header p {
+    margin: 12px 0 0;
+
+    font-size: 13px;
+}
+
+.separator {
+    height: 3px;
+
+    margin: 0 0 25px;
+
+    background:
+        repeating-linear-gradient(90deg,
+            #000,
+            #000 4px,
+            #fff 4px,
+            #fff 7px);
+}
+
+.login-section {
+    text-align: center;
+}
+
+.login-section p {
+    margin: 0 0 18px;
+
+    font-weight: bold;
+}
+
+.login-button {
+    display: block;
+
+    width: 100%;
+
+    padding: 11px;
+
+    border: 2px solid #000;
+
+    background: #fff;
+
+    color: #000;
+
+    text-decoration: none;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    box-shadow:
+        4px 4px 0 #000;
+}
+
+.login-button:hover {
+    background: #000;
+
+    color: #fff;
+}
+
+.login-button:active {
+    transform: translate(2px, 2px);
+
+    box-shadow:
+        2px 2px 0 #000;
+}
+
+.signup {
+    text-align: center;
+
+    margin-top: 30px;
+
+    padding-top: 18px;
+
+    border-top: 3px double #000;
+
+    font-size: 12px;
+}
+
+.signup span {
+    margin-right: 8px;
+}
+
+.signup a {
+    color: #000;
+
+    font-weight: bold;
+
+    text-decoration: underline;
+}
+
+.signup a:hover {
+    background: #000;
+
+    color: #fff;
+
+    text-decoration: none;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 15px;
+    }
+
+    .window {
+        width: 100%;
+    }
+
+    .content {
+        padding: 25px 20px 20px;
+    }
+
+    .header h1 {
+        font-size: 17px;
+    }
+}

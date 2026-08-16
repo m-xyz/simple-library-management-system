@@ -8,121 +8,15 @@
 
     <title>Forbidden Library</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            background: #ffffff;
-            color: #000000;
-
-            font-family: "Courier New", monospace;
-            font-size: 14px;
-
-            background-image:
-                radial-gradient(#000 0.6px, transparent 0.6px);
-
-            background-size: 4px 4px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .forbidden-container {
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
-
-            text-align: center;
-
-            max-width: 90%;
-        }
-
-        .forbidden-image {
-            max-width: 90%;
-            max-height: 70vh;
-
-            object-fit: contain;
-
-            display: block;
-        }
-
-        .return-button {
-            display: inline-block;
-
-            margin-top: 25px;
-
-            min-width: 150px;
-
-            padding: 9px 15px;
-
-            border: 1px solid #000;
-
-            background: #fff;
-
-            color: #000;
-
-            text-decoration: none;
-
-            font-family: "Courier New", monospace;
-
-            font-weight: bold;
-
-            text-align: center;
-
-            box-shadow:
-                3px 3px 0 #000;
-        }
-
-        .return-button:hover {
-            background: #000;
-
-            color: #fff;
-        }
-
-        .return-button:active {
-            transform: translate(2px, 2px);
-
-            box-shadow:
-                1px 1px 0 #000;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 600px) {
-
-            .forbidden-image {
-                max-width: 95%;
-                max-height: 65vh;
-            }
-
-            .return-button {
-                width: 100%;
-            }
-
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/forbidden.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
 
 </head>
 
 <body>
     <div class="forbidden-container">
         <img src="/images/forbidden.png" alt="Forbidden" class="forbidden-image">
-        <a th:href="${returnUrl}" class="return-button"> GO HOME </a>
+        <a th:href="@{/home}" class="return-button"> GO HOME </a>
     </div>
 </body>
 

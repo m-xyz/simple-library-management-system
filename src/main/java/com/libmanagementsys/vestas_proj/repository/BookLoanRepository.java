@@ -67,4 +67,14 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, BookLoanId> 
             AND bl.returnDate IS NULL
                 """)
     List<BookLoan> getOnLoanByIsbn(@Param("isbn") String isbn);
+
+    @Query("""
+            SELECT CASE WHEN COUNT(bl) > 0 THEN true ELSE false END
+            FROM BookLoan bl
+            JOIN bl.transaction t
+            WHERE t.user.id = :userId
+            AND bl.id.isbn = :isbn
+            AND bl.returnDate IS NULL
+                """)
+    boolean checkIfUserIsBorrowingBook(Long userId, String isbn);
 }

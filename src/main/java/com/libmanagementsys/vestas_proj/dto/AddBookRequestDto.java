@@ -1,19 +1,19 @@
-package com.libmanagementsys.vestas_proj.model;
+package com.libmanagementsys.vestas_proj.dto;
 
-public class AddBookRequest {
+public class AddBookRequestDto {
     private String isbn;
     private String title;
     private String authorName;
     private int stock;
 
-    public AddBookRequest(String isbn, String title, String authorName, int stock) {
+    public AddBookRequestDto(String isbn, String title, String authorName, int stock) {
         this.isbn = isbn;
         this.title = title;
         this.authorName = authorName;
         this.stock = stock;
     }
 
-    public AddBookRequest() {
+    public AddBookRequestDto() {
     }
 
     public String getIsbn() {

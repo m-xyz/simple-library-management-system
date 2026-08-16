@@ -18,15 +18,16 @@ public class UserService {
     }
 
     public User register(User user) {
-        user.setPassword(pwEncoder.encode(user.getPassword())); // TODO: Change later
+        user.setPassword(pwEncoder.encode(user.getPassword()));
 
         return userRepo.save(user);
 
     }
 
     public User findByUsername(String username) {
-        // TODO: Does this need to be runtime ?
-        return userRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepo.findByUsername(username)
+                .orElseThrow(
+                        () -> new RuntimeException("User not found"));
     }
 
 }

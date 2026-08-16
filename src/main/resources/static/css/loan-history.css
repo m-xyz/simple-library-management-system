@@ -1,0 +1,228 @@
+.window {
+    width: 94%;
+    max-width: 1400px;
+
+    margin: 35px auto;
+
+    background: #ffffff;
+
+    border: 3px solid #000;
+
+    box-shadow:
+        6px 6px 0 #000;
+}
+
+.window-icon {
+    width: 16px;
+    height: 16px;
+
+    border: 2px solid #000;
+
+    margin-right: 10px;
+
+    background:
+        linear-gradient(to bottom,
+            #000 0px,
+            #000 2px,
+            #fff 2px,
+            #fff 4px);
+
+    background-size: 100% 4px;
+}
+
+.close-button {
+    width: 18px;
+    height: 18px;
+
+    padding: 0;
+
+    background: #fff;
+    color: #000;
+
+    border: 2px solid #000;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+
+    line-height: 12px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+}
+
+.close-button:hover {
+    background: #000;
+    color: #fff;
+}
+
+.content {
+    padding: 25px;
+}
+
+.page-header {
+    margin-bottom: 25px;
+}
+
+.page-header h1 {
+    font-size: 22px;
+
+    margin: 0 0 8px 0;
+
+    text-transform: uppercase;
+}
+
+.page-header h1 span {
+    background: #000;
+
+    color: #fff;
+
+    padding: 2px 6px;
+}
+
+.page-description {
+    font-size: 13px;
+
+    margin-top: 12px;
+
+    line-height: 1.5;
+}
+
+.toolbar {
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 28px;
+}
+
+.table-wrapper {
+    border: 2px solid #000;
+
+    overflow-x: auto;
+}
+
+
+.action {
+    font-weight: bold;
+
+    text-align: center;
+
+    width: 130px;
+}
+
+.action-label {
+    display: inline-block;
+
+    padding: 4px 7px;
+
+    border: 2px solid #000;
+
+    background: #fff;
+
+    color: #000;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing: 0.5px;
+}
+
+tbody tr:hover .action-label {
+    background: #000;
+
+    color: #fff;
+
+    border-color: #fff;
+}
+
+.fine {
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+.no-fine {
+    color: #555;
+}
+
+.has-fine {
+    color: rgb(255, 0, 0);
+
+    font-weight: bold;
+}
+
+tbody tr:hover .has-fine {
+    color: #fff;
+}
+
+.log-count {
+    margin-top: 12px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.resize-handle {
+    width: 15px;
+    height: 15px;
+
+    border-left: 2px solid #000;
+
+    border-top: 2px solid #000;
+
+    margin-left: auto;
+}
+
+.loan-status {
+    background: #dcecff;
+    color: #003399;
+    border-color: #003399;
+}
+
+.loan-done-status {
+    background: #dcf5dc;
+    color: #006600;
+    border-color: #006600;
+}
+
+tbody tr:hover .loan-status,
+tbody tr:hover .loan-done-status {
+    background: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .content {
+        padding: 15px;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .mac-button {
+        width: 100%;
+    }
+
+    .window {
+        width: 96%;
+
+        margin: 15px auto;
+    }
+
+    .page-header h1 {
+        font-size: 18px;
+    }
+}

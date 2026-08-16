@@ -19,7 +19,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication auth) throws IOException, ServletException {
-        // TODO: Does this need a loop ?
+
         for (GrantedAuthority authority : auth.getAuthorities()) {
             String role = authority.getAuthority();
 
@@ -33,7 +33,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 return;
             }
         }
-        // Should it redirect to "/" ?
         response.sendRedirect("/");
     }
 

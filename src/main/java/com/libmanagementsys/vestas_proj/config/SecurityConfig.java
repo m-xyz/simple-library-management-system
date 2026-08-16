@@ -8,6 +8,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.libmanagementsys.vestas_proj.service.CustomAuthenticationSuccessHandler;
 
+import jakarta.servlet.DispatcherType;
+
 @Configuration
 public class SecurityConfig {
 
@@ -22,6 +24,7 @@ public class SecurityConfig {
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers("/", "/signup", "/login", "/css/**", "/forbidden").permitAll()
                         .requestMatchers("/owner/**").hasRole("OWNER")
                         .requestMatchers("/client/**").hasRole("CLIENT")
@@ -30,6 +33,7 @@ public class SecurityConfig {
                         login -> login
                                 .loginPage("/login")
                                 .successHandler(successHandler)
+                                .failureUrl("/login?error")
                                 .permitAll())
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login"))

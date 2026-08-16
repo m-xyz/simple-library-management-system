@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>404 Library</title>
+
+    <link rel="stylesheet" th:href="@{/css/not-found.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+
+</head>
+
+<body>
+
+    <div class="not-found-container">
+
+        <img th:src="@{/images/404.png}" alt="Not Found" class="not-found-image">
+
+        <a th:href="@{/home}" class="return-button">
+            GO HOME
+        </a>
+
+    </div>
+
+</body>
+
+</html>

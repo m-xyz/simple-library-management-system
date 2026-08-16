@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.libmanagementsys.vestas_proj.model.AddBookRequest;
+import com.libmanagementsys.vestas_proj.dto.AddBookRequestDto;
 import com.libmanagementsys.vestas_proj.model.Author;
 import com.libmanagementsys.vestas_proj.model.Book;
 import com.libmanagementsys.vestas_proj.repository.AuthorRepository;
@@ -39,7 +39,7 @@ public class BookService {
     }
 
     // Add/Update book
-    public Book addBook(AddBookRequest bookRequest) {
+    public Book addBook(AddBookRequestDto bookRequest) {
         return bookRepo.save(new Book(
                 bookRequest.getIsbn(),
                 bookRequest.getTitle(),
@@ -50,7 +50,8 @@ public class BookService {
     public void decommBook(String isbn) {
         Book book = bookRepo
                 .findByIsbn(isbn)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(
+                        () -> new RuntimeException("Book \'" + isbn + "\' not found."));
         book.setDecommissioned(!book.isDecommissioned());
         bookRepo.save(book);
     }
@@ -73,5 +74,10 @@ public class BookService {
 
     public boolean existsByIsbn(String isbn) {
         return bookRepo.existsByIsbn(isbn);
+    }
+
+    public void updateStock(Book book, int n) {
+        book.addStock(n);
+        bookRepo.save(book);
     }
 }

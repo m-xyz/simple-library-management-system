@@ -5,591 +5,13 @@
 <head>
 
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
     <title>Library</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: #ffffff;
-            color: #000000;
-
-            font-family: "Courier New", monospace;
-            font-size: 14px;
-
-            background-image:
-                radial-gradient(#000 0.6px, transparent 0.6px);
-
-            background-size: 4px 4px;
-        }
-
-        .window {
-            width: 94%;
-            max-width: 1200px;
-
-            margin: 35px auto;
-
-            background: #ffffff;
-
-            border: 3px solid #000;
-
-            box-shadow:
-                6px 6px 0 #000;
-        }
-
-        .title-bar {
-            height: 34px;
-
-            display: flex;
-            align-items: center;
-
-            border-bottom: 3px solid #000;
-
-            background: #fff;
-
-            padding: 0 8px;
-
-            position: relative;
-        }
-
-        .logout-form {
-            margin: 0;
-            padding: 0;
-
-            z-index: 2;
-        }
-
-        .logout-button {
-            width: 18px;
-            height: 18px;
-
-            padding: 0;
-
-            background: #fff;
-            color: #000;
-
-            border: 2px solid #000;
-
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-            font-weight: bold;
-
-            line-height: 12px;
-
-            cursor: pointer;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logout-button:hover {
-            background: #000;
-            color: #fff;
-        }
-
-        .title {
-            position: absolute;
-
-            left: 50%;
-
-            transform: translateX(-50%);
-
-            background: #fff;
-
-            padding: 0 12px;
-
-            font-weight: bold;
-
-            letter-spacing: 1px;
-        }
-
-        .content {
-            padding: 25px;
-        }
-
-        .welcome {
-            margin-bottom: 25px;
-        }
-
-        .welcome h1 {
-            font-size: 22px;
-
-            margin: 0 0 8px 0;
-
-            text-transform: uppercase;
-        }
-
-        .welcome h1 .username {
-            text-transform: none;
-        }
-
-        .welcome h1 span {
-            background: #000;
-
-            color: #fff;
-
-            padding: 2px 6px;
-        }
-
-        .datetime {
-            display: flex;
-
-            justify-content: flex-start;
-
-            gap: 20px;
-
-            font-size: 13px;
-
-            font-weight: bold;
-        }
-
-        .datetime span {
-            background: #000;
-
-            color: #fff;
-
-            padding: 2px 6px;
-        }
-
-        .toolbar {
-            display: flex;
-
-            gap: 12px;
-
-            margin-bottom: 28px;
-        }
-
-        .mac-button {
-            display: inline-block;
-
-            min-width: 150px;
-
-            padding: 8px 14px;
-
-            color: #000;
-
-            background: #fff;
-
-            border: 1px solid #000;
-
-            text-decoration: none;
-
-            font-family: "Courier New", monospace;
-
-            font-weight: bold;
-
-            text-align: center;
-
-            box-shadow:
-                3px 3px 0 #000;
-        }
-
-        .mac-button:hover {
-            background: #000;
-
-            color: #fff;
-        }
-
-        .mac-button:active {
-            transform: translate(2px, 2px);
-
-            box-shadow:
-                1px 1px 0 #000;
-        }
-
-        .section-title {
-            font-weight: bold;
-
-            margin-bottom: 8px;
-
-            padding: 5px 8px;
-
-            border: 2px solid #000;
-
-            background: #000;
-
-            color: #fff;
-
-            letter-spacing: 1px;
-        }
-
-        .table-wrapper {
-            border: 2px solid #000;
-
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-
-            border-collapse: collapse;
-
-            background: #fff;
-        }
-
-        th {
-            background: #fff;
-
-            border-bottom: 3px double #000;
-
-            padding: 10px;
-
-            text-align: left;
-
-            font-weight: bold;
-
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 10px;
-
-            border-bottom: 1px solid #000;
-        }
-
-        tbody tr:nth-child(even) {
-            background: repeating-linear-gradient(45deg,
-                    #fff,
-                    #fff 2px,
-                    #000 2px,
-                    #000 3px);
-
-            background-size: 5px 5px;
-        }
-
-        tbody tr:nth-child(even) td {
-            background: rgba(255, 255, 255, 0.88);
-        }
-
-        tbody tr:hover td {
-            background: #000;
-
-            color: #fff;
-        }
-
-        .isbn {
-            font-family: "Courier New", monospace;
-
-            font-weight: bold;
-        }
-
-        .stock {
-            text-align: center;
-
-            font-weight: bold;
-        }
-
-        .actions {
-            white-space: nowrap;
-        }
-
-        .borrow-button {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border: 2px solid #000;
-
-            color: #000;
-
-            background: #fff;
-
-            text-decoration: none;
-
-            font-family: "Courier New", monospace;
-
-            font-weight: bold;
-        }
-
-        .borrow-button:hover {
-            background: #fff;
-
-            color: #000;
-
-            border: 2px solid #000;
-        }
-
-        .borrow-disabled {
-            display: inline-block;
-
-            padding: 5px 10px;
-
-            border: 2px solid #777;
-
-            color: #777;
-
-            background: #fff;
-
-            font-family: "Courier New", monospace;
-
-            font-weight: bold;
-        }
-
-        .status-bar {
-            display: flex;
-
-            justify-content: space-between;
-
-            margin-top: 25px;
-
-            border-top: 3px double #000;
-
-            padding-top: 8px;
-
-            font-size: 12px;
-        }
-
-        .status-indicator {
-            display: inline-block;
-
-            width: 10px;
-            height: 10px;
-
-            border: 2px solid #000;
-
-            margin-right: 5px;
-
-            vertical-align: middle;
-        }
-
-        .resize-handle {
-            width: 15px;
-            height: 15px;
-
-            border-left: 2px solid #000;
-
-            border-top: 2px solid #000;
-
-            margin-left: auto;
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 700px) {
-
-            .content {
-                padding: 15px;
-            }
-
-            .toolbar {
-                flex-direction: column;
-            }
-
-            .mac-button {
-                width: 100%;
-            }
-
-            .window {
-                width: 96%;
-
-                margin: 15px auto;
-            }
-
-        }
-
-        input[type="checkbox"] {
-            appearance: none;
-            -webkit-appearance: none;
-
-            width: 18px;
-            height: 18px;
-
-            border: 2px solid #000;
-            background: #fff;
-
-            cursor: pointer;
-
-            vertical-align: middle;
-        }
-
-        input[type="checkbox"]:checked {
-            background: #000;
-            position: relative;
-        }
-
-        input[type="checkbox"]:checked::after {
-            content: "✓";
-
-            color: #fff;
-
-            font-family: "Courier New", monospace;
-            font-size: 14px;
-            font-weight: bold;
-
-            position: absolute;
-
-            left: 2px;
-            top: -2px;
-        }
-
-        input[type="checkbox"]:disabled {
-            background: #fff;
-
-            border: 2px dashed #000;
-
-            cursor: not-allowed;
-        }
-
-        .out-of-stock {
-            font-weight: bold;
-            font-size: 11px;
-            text-decoration: line-through;
-        }
-
-        .borrow-button:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        .borrow-bar {
-            display: flex;
-            justify-content: center;
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 3px double #000;
-        }
-
-        .borrow-button {
-            min-width: 190px;
-            background: #000;
-            color: #fff;
-            border: 2px solid #000;
-            cursor: pointer;
-        }
-
-        .borrow-button:hover {
-            background: #fff;
-            color: #000;
-        }
-
-        /* Disabled when nothing is selected */
-        .borrow-button:disabled {
-            background: #ccc;
-            color: #666;
-            border-color: #888;
-            cursor: not-allowed;
-            box-shadow: 3px 3px 0 #888;
-        }
-
-        .error-message {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            padding: 12px 14px;
-            background: #fff;
-            border: 1px solid #000;
-            box-shadow: 4px 4px 0 #000;
-            font-weight: bold;
-        }
-
-        .error-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-            background: #ff0000;
-            border: 1px solid #000;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 50%;
-        }
-
-        .error-text {
-            line-height: 1.4;
-        }
-
-        .success-message {
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            margin-bottom: 25px;
-
-            padding: 12px 14px;
-
-            background: #fff;
-
-            border: 1px solid #000;
-
-            box-shadow:
-                4px 4px 0 #000;
-
-            font-weight: bold;
-        }
-
-        .success-icon {
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            width: 24px;
-            height: 24px;
-
-            flex-shrink: 0;
-
-            background: #00ff00;
-
-            border: 1px solid #000;
-
-            color: #000000;
-
-            font-family: "Courier New", monospace;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .success-text {
-            line-height: 1.4;
-        }
-
-        .duplicate-book td {
-            background: #fff0f0 !important;
-            color: #900;
-        }
-
-        .duplicate-book td:first-child {
-            border-left: 5px solid #c00;
-        }
-
-        .duplicate-book .isbn {
-            color: #c00;
-        }
-
-        .duplicate-book .book-checkbox {
-            border: 3px solid #c00;
-        }
-
-        .duplicate-book:hover td {
-            background: #000 !important;
-            color: #fff;
-        }
-
-        .duplicate-book:hover .isbn {
-            color: #fff;
-        }
-
-        .duplicate-book:hover .book-checkbox {
-            border-color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
 
 </head>
 
@@ -625,19 +47,26 @@
 
         <div class="content">
             <!-- ========================================= -->
-            <!-- LOAN ERROR                                -->
+            <!-- ERROR MESSAGE                             -->
             <!-- ========================================= -->
             <div class="error-message" th:if="${errorMessage}">
                 <div class="error-icon"> ! </div>
-                <div class="error-text" th:text="${errorMessage}"> You already have this book on loan. </div>
+                <div class="error-text" th:text="${errorMessage}"></div>
             </div>
 
             <!-- ========================================= -->
-            <!-- LOAN SUCCESS                              -->
+            <!-- SUCCESS MESSAGE                           -->
             <!-- ========================================= -->
             <div class="success-message" th:if="${successMessage}">
                 <div class="success-icon"> ✓ </div>
-                <div class="success-text" th:text="${successMessage}"> Books successfully borrowed. </div>
+                <div class="success-text" th:text="${successMessage}"></div>
+            </div>
+
+            <!-- ========================================= -->
+            <!-- RETURN BOOK(S) MESSAGE                    -->
+            <!-- ========================================= -->
+            <div th:if="${successMessages}" class="success-messages">
+                <div th:each="message : ${successMessages}" class="success-message" th:text="${message}"></div>
             </div>
 
             <!-- ========================================= -->
@@ -708,6 +137,18 @@
                                     <input type="checkbox" class="book-checkbox" name="isbns" th:value="${book.isbn}"
                                         th:disabled="${book.stock <= 0}"
                                         th:checked="${selectedIsbns != null and selectedIsbns.contains(book.isbn)}">
+
+                                    <button type="button" class="waitlist-button" th:if="${book.stock <= 0}"
+                                        th:with="waitlistCount=${waitingListService.getCountByBook(book.isbn)}" th:attr="
+                                        data-isbn=${book.isbn},
+                                        data-title=${book.title},
+                                        data-waitlist-count=${waitlistCount}
+                                    " onclick="openWaitlistWindow(
+                                        this.dataset.isbn,
+                                        this.dataset.title,
+                                        this.dataset.waitlistCount
+                                    )" th:text="|WAITLIST (${waitlistCount})|">
+                                    </button>
                                 </td>
                                 <td th:text="${book.isbn}"></td>
                                 <td th:text="${book.title}"></td>
@@ -729,8 +170,79 @@
         </div>
 
     </div>
+    <template id="waitlist-window-template">
+
+        <div class="waitlist-window">
+
+            <div class="waitlist-title-bar">
+
+                <button type="button" class="waitlist-close">
+                    ×
+                </button>
+
+                <div class="waitlist-title">
+                    JOIN WAITING LIST
+                </div>
+
+            </div>
+
+            <div class="waitlist-content">
+
+                <div class="waitlist-message">
+
+                    Do you want to join the waiting list for
+
+                    <span class="waitlist-book-title"></span> ?
+
+                    <div class="waitlist-count">
+                        Waitlist for this book:
+                        <span class="waitlist-user-count"></span>
+                        users
+                    </div>
+
+                </div>
+
+                <div class="waitlist-actions">
+
+                    <button type="button" class="waitlist-confirm">
+                        [YES]
+                    </button>
+
+                    <button type="button" class="waitlist-cancel">
+                        [NO]
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </template>
 
     <script>
+
+        function waitListMessage(message, messageType) {
+            const waitListMessage = document.createElement("div");
+            waitListMessage.className = `${messageType}-message`;
+
+            waitListMessage.innerHTML = `
+                <div class="${messageType}-icon">!</div>
+                <div class="${messageType}-text">${message}</div>
+            `;
+
+            document.querySelector(".content").prepend(waitListMessage);
+        }
+
+        if (sessionStorage.getItem("joinWaitlistSuccess")) {
+            waitListMessage(sessionStorage.getItem("joinWaitlistSuccess"), "success");
+            sessionStorage.removeItem("joinWaitlistSuccess");
+        }
+
+        if (sessionStorage.getItem("joinWaitlistFail")) {
+            waitListMessage(sessionStorage.getItem("joinWaitlistFail"), "error");
+            sessionStorage.removeItem("joinWaitlistFail");
+        }
 
         function updateDateTime() {
 
@@ -778,6 +290,70 @@
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener("change", updateBorrowButton);
         }); updateBorrowButton();
+
+        function openWaitlistWindow(isbn, title, waitlistCount) {
+
+            const csrfToken =
+                document.querySelector('meta[name="_csrf"]').content;
+
+            const csrfHeader =
+                document.querySelector('meta[name="_csrf_header"]').content;
+
+            const template =
+                document.getElementById("waitlist-window-template");
+
+            const windowElement =
+                template.content.firstElementChild.cloneNode(true);
+
+            document.body.appendChild(windowElement);
+
+            windowElement.querySelector(".waitlist-book-title")
+                .textContent = title;
+
+            windowElement.querySelector(".waitlist-user-count")
+                .textContent = waitlistCount;
+
+            const closeWindow = () => {
+                windowElement.remove();
+            };
+
+            windowElement.querySelector(".waitlist-close")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".waitlist-cancel")
+                .addEventListener("click", closeWindow);
+
+            windowElement.querySelector(".waitlist-confirm")
+                .addEventListener("click", async function () {
+
+                    try {
+
+                        const response = await fetch(
+                            `/client/waitlist/${encodeURIComponent(isbn)}`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    [csrfHeader]: csrfToken
+                                }
+                            }
+                        );
+
+                        if (!response.ok) {
+                            throw new Error(await response.text());
+                        }
+
+                        sessionStorage.setItem("joinWaitlistSuccess", await response.text());
+                        closeWindow();
+                        location.reload();
+
+                    } catch (error) {
+                        sessionStorage.setItem("joinWaitlistFail", error.message);
+                        closeWindow();
+                        location.reload();
+                    }
+
+                });
+        }
 
     </script>
 
