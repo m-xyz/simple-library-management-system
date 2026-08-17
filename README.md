@@ -50,6 +50,12 @@ or alternatively, build the application first:
 ```
 ./mvnw clean package
 ```
+### Run tests
+
+```
+./mvnw test
+```
+
 ## DB Schema
 
                          ┌─────────────────────┐
